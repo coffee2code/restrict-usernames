@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Restrict Usernames
-Version: 1.0
+Version: 1.1
 Plugin URI: http://coffee2code.com/wp-plugins/restrict-usernames
 Author: Scott Reilly
 Author URI: http://coffee2code.com
@@ -25,7 +25,7 @@ ERROR: This username is invalid. Please enter a valid username.
 NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within
 the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.
 
-Compatible with WordPress 2.6+, 2.7+.
+Compatible with WordPress 2.6+, 2.7+, 2.8+.
 
 =>> Read the accompanying readme.txt file for more information.  Also, visit the plugin's homepage
 =>> for more information and the latest updates
@@ -77,7 +77,7 @@ class RestrictUsernames {
 	var $menu_name = '';
 
 	function RestrictUsernames() {
-		$this->plugin_basename = plugin_basename(__FILE__); 
+		$this->plugin_basename = plugin_basename(__FILE__);
 		$this->plugin_name = __('Restrict Usernames');
 		$this->menu_name = __('Name Restrictions');
 
@@ -93,8 +93,21 @@ class RestrictUsernames {
 	}
 
 	function admin_menu() {
-		if ( $this->show_admin )
-			add_users_page($this->menu_name, $this->menu_name, 9, $this->plugin_basename, array(&$this, 'options_page'));
+		if ( $this->show_admin ) {
+			global $wp_version;
+			if ( current_user_can('manage_options') ) {
+				if ( version_compare( $wp_version, '2.6.999', '>' ) )
+					add_filter( 'plugin_action_links_' . $this->plugin_basename, array(&$this, 'plugin_action_links') );
+				add_users_page($this->menu_name, $this->menu_name, 9, $this->plugin_basename, array(&$this, 'options_page'));
+			}
+		}
+	}
+
+	function plugin_action_links( $action_links ) {
+		$settings_link = '<a href="users.php?page='.$this->plugin_basename.'">' . __('Settings') . '</a>';
+		array_unshift( $action_links, $settings_link );
+
+		return $action_links;
 	}
 
 	function get_options() {
@@ -143,13 +156,13 @@ class RestrictUsernames {
 		}
 
 		$action_url = $_SERVER[PHP_SELF] . '?page=' . $this->plugin_basename;
-		$logo = get_option('siteurl') . '/wp-content/plugins/' . basename($_GET['page'], '.php') . '/c2c_minilogo.png';
+		$logo = plugins_url() . '/' . basename($_GET['page'], '.php') . '/c2c_minilogo.png';
 
 		echo <<<END
 		<div class='wrap'>
 			<div class="icon32" style="width:44px;"><img src='$logo' alt='A plugin by coffee2code' /><br /></div>
 			<h2>{$this->plugin_name} Settings</h2>
-			<p>If open registration is enabled for your site (via Settings -> General -> Membership ("Anyone can register")), WordPress allows visitors to register for an account on your blog.  By default, any username they choose is allowed so long as it isn't an already existing account and it doesn't include invalid (i.e. non-alphanumeric) characters.</p>
+			<p>If open registration is enabled for your site (via Settings &rarr; General &rarr; Membership ("Anyone can register")), WordPress allows visitors to register for an account on your blog.  By default, any username they choose is allowed so long as it isn't an already existing account and it doesn't include invalid (i.e. non-alphanumeric) characters.</p>
 
 			<p>Possible reasons for wanting to restrict certain usernames:<br />
 				* Prevent usernames that contain foul, offensive, or otherwise undesired words<br />
@@ -287,13 +300,11 @@ END;
 } // end RestrictUsernames
 
 endif; // end if !class_exists()
+
 if ( class_exists('RestrictUsernames') ) :
-	// Get the ball rolling
 	$restrict_usernames = new RestrictUsernames();
-	// Actions and filters
-	if ( isset($restrict_usernames) ) {
+	if ( isset($restrict_usernames) )
 		register_activation_hook( __FILE__, array(&$restrict_usernames, 'install') );
-	}
 endif;
 
 ?>
