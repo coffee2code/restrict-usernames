@@ -2,10 +2,10 @@
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code
-Requires at least: 2.6
-Tested up to: 2.8.2
-Stable tag: 1.1
-Version: 1.1
+Requires at least: 2.8
+Tested up to: 2.9.1
+Stable tag: 2.0.1
+Version: 2.0.1
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -21,6 +21,8 @@ Possible reasons for wanting to restrict certain usernames:
 * Prevent squatting on usernames that you may want to use in the future (but don't want to actually create the account for just yet) (essentially placing a hold on the username)
 * Prevent official-sounding usernames from being used (i.e. help, support, pr, info)
 * Prevent official username syntax from being used (i.e. if all of your administrators use a prefix to identify themselves, you don't want a visitor to use that prefix)
+* Prevent spaces from being used in a username (which WordPress allows by default)
+* Require that a username begin, end, or contain one of a set of substrings (i.e. "support_", "admin_")
 
 When attempting to register with a restricted username, the visitor will be given an error notice that says:
 ERROR: This username is invalid. Please enter a valid username.
@@ -30,7 +32,7 @@ NOTE: This plugin does not put any restrictions on usernames that the admin choo
 
 == Installation ==
 
-1. Unzip `restrict-usernames.zip` inside the `/wp-content/plugins/` directory for your site
+1. Unzip `restrict-usernames.zip` inside the `/wp-content/plugins/` directory for your site (or install via the built-in WordPress plugin installer)
 1. Activate the plugin through the 'Plugins' admin menu in WordPress
 1. Go to the Users -> Name Restrictions admin settings page.  Specify username restrictions.
 
@@ -50,7 +52,31 @@ No.
 
 1. A screenshot of the plugin's admin settings page.
 
+
 == Changelog ==
+
+= 2.0.1 =
+* Fix to add accidentally omitted get_option_names()
+
+= 2.0 =
+* Add option to disallow use of spaces in usernames
+* Add option to allow requirement of any of numerous substrings as part of usernames (including start with and end with requirements)
+* Add reset button to reset options
+* Move initialization of config array out of constructor and into new function load_config()
+* Create init() to handle calling load_textdomain() and load_config() (textdomain must be loaded before initializing config)
+* Return immediately if username being check is already invalid
+* Use strpos() instead of stristr()
+* Changed invocation of plugin's install function to action hooked in constructor rather than in global space
+* Extract settings saving code into maybe_save_options()
+* Extract settings display code into display_option()
+* Update object's option buffer after saving changed submitted by user
+* Add support for localization
+* Add .pot file
+* Add PHPDoc documentation
+* Note compatibility with WP 2.9+
+* Drop compatibility with versions of WP older than 2.8
+* Update documentation
+* Update copyright date
 
 = 1.1 =
 * Added 'Settings' link to plugin's plugin listing entry
