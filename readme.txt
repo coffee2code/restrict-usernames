@@ -3,11 +3,12 @@ Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code
 Requires at least: 2.8
-Tested up to: 2.9.1
-Stable tag: 2.0.1
-Version: 2.0.1
+Tested up to: 3.0.1
+Stable tag: 3.0
+Version: 3.0
 
 Restrict the usernames that new users may use when registering for your site.
+
 
 == Description ==
 
@@ -55,6 +56,27 @@ No.
 
 == Changelog ==
 
+= 3.0 =
+* Re-implementation by extending C2C_Plugin_016, which among other things adds support for:
+    * Reset of options to default values
+    * Better sanitization of input values
+    * Offload of core/basic functionality to generic plugin framework
+    * Additional hooks for various stages/places of plugin operation
+    * Easier localization support
+* Full localization support
+* Fix to display custom error message rather than the incorrect WordPress default validation error message
+* Store plugin instance in global variable, $c2c_restrict_usernames, to allow for external manipulation
+* Rename class from 'RestrictUsernames' to 'c2c_RestrictUsernames'
+* Remove docs from top of plugin file (all that and more are in readme.txt)
+* Note compatibility with WP 2.9+, 3.0+
+* Drop compatibility with versions of WP older than 2.8
+* Add PHPDoc documentation
+* Minor tweaks to code formatting (spacing)
+* Add Upgrade Notice section to readme.txt
+* Remove trailing whitespace
+* Update screenshot
+* Update .pot file
+
 = 2.0.1 =
 * Fix to add accidentally omitted get_option_names()
 
@@ -86,3 +108,9 @@ No.
 
 = 1.0 =
 * Initial release
+
+
+== Upgrade Notice ==
+
+= 3.0 =
+Recommended update. Highlights: re-implementation using custom plugin framework; full localization support; misc non-functionality documentation and formatting tweaks; renamed class; verified WP 3.0 compatibility; dropped support for versions of WP older than 2.8.

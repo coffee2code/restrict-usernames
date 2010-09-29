@@ -1,4 +1,4 @@
-# Translation of the WordPress plugin Restrict Usernames 2.0 by Scott Reilly.
+# Translation of the WordPress plugin Restrict Usernames 3.0 by Scott Reilly.
 # Copyright (C) 2010 Scott Reilly
 # This file is distributed under the same license as the Restrict Usernames package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Restrict Usernames 2.0\n"
+"Project-Id-Version: Restrict Usernames 3.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/restrict-usernames\n"
-"POT-Creation-Date: 2010-01-21 00:02-0600\n"
+"POT-Creation-Date: 2010-09-28 16:26-0400\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,41 +16,110 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. #-#-#-#-#  restrict-usernames.pot (Restrict Usernames 2.0)  #-#-#-#-#
-#. Plugin Name of an extension
-#: restrict-usernames.php:123
+#: c2c-plugin.php:59
+#, php-format
+msgid "Invalid file specified for C2C_Plugin: %s"
+msgstr ""
+
+#: c2c-plugin.php:241
+msgid "Settings reset."
+msgstr ""
+
+#: c2c-plugin.php:252 c2c-plugin.php:260
+#, php-format
+msgid "A value is required for: \"%s\""
+msgstr ""
+
+#: c2c-plugin.php:269
+#, php-format
+msgid "Expected integer value for: %s"
+msgstr ""
+
+#: c2c-plugin.php:380
+#, php-format
+msgid "More information about %1$s %2$s"
+msgstr ""
+
+#: c2c-plugin.php:381
+msgid "Click for more help on this plugin"
+msgstr ""
+
+#: c2c-plugin.php:382
+msgid " (especially check out the \"Other Notes\" tab, if present)"
+msgstr ""
+
+#: c2c-plugin.php:473
+msgid "Settings"
+msgstr ""
+
+#: c2c-plugin.php:703
+msgid "See the \"Help\" link to the top-right of the page for more help."
+msgstr ""
+
+#: c2c-plugin.php:721
+msgid "A plugin by coffee2code"
+msgstr ""
+
+#: c2c-plugin.php:732
+msgid "Save Changes"
+msgstr ""
+
+#: c2c-plugin.php:733
+msgid "Reset Settings"
+msgstr ""
+
+#: c2c-plugin.php:739
+msgid "Scott Reilly, aka coffee2code"
+msgstr ""
+
+#: c2c-plugin.php:740
+#, php-format
+msgid "This plugin brought to you by %s."
+msgstr ""
+
+#: c2c-plugin.php:741
+msgid "Please consider a donation"
+msgstr ""
+
+#: c2c-plugin.php:742
+msgid "Did you find this plugin useful?"
+msgstr ""
+
+#. #-#-#-#-#  restrict-usernames.pot (Restrict Usernames 3.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: restrict-usernames.php:63
 msgid "Restrict Usernames"
 msgstr ""
 
-#: restrict-usernames.php:124
+#: restrict-usernames.php:64
 msgid "Name Restrictions"
 msgstr ""
 
-#: restrict-usernames.php:128
+#: restrict-usernames.php:70
 msgid "Don't allow spaces in usernames."
 msgstr ""
 
-#: restrict-usernames.php:129
+#: restrict-usernames.php:71
 msgid ""
 "WordPress allows spaces in usernames.  Check this if you don't want to allow "
 "spaces."
 msgstr ""
 
-#: restrict-usernames.php:132
+#: restrict-usernames.php:74
 msgid "Restricted usernames"
 msgstr ""
 
-#: restrict-usernames.php:133
+#: restrict-usernames.php:75
 msgid ""
 "List the usernames that newly-registering users cannot use.  Define one per "
 "line and use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:136
+#: restrict-usernames.php:78
 msgid "Restricted usernames (partial matching)"
 msgstr ""
 
-#: restrict-usernames.php:137
+#: restrict-usernames.php:79
 msgid ""
 "These are partial text values that cannot appear in usernames requested by "
 "newly-registering users.  Useful to prevent usage of bad language or prevent "
@@ -59,11 +128,11 @@ msgid ""
 "any part of a username.  Define one per line and use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:140
+#: restrict-usernames.php:82
 msgid "Required username substring"
 msgstr ""
 
-#: restrict-usernames.php:141
+#: restrict-usernames.php:83
 msgid ""
 "These are partial text values, one of which MUST appear in any username "
 "requested by newly-registering users.  Useful to force users to include some "
@@ -78,27 +147,11 @@ msgid ""
 "use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:164
-msgid "Settings"
-msgstr ""
-
-#: restrict-usernames.php:200
-msgid "Settings reset."
-msgstr ""
-
-#: restrict-usernames.php:226
-msgid "Settings saved."
-msgstr ""
-
-#: restrict-usernames.php:318
-msgid "A plugin by coffee2code"
-msgstr ""
-
-#: restrict-usernames.php:319
+#: restrict-usernames.php:106
 msgid "Restrict Usernames Settings"
 msgstr ""
 
-#: restrict-usernames.php:320
+#: restrict-usernames.php:107
 msgid ""
 "If open registration is enabled for your site (via Settings &rarr; General "
 "&rarr; Membership (\"Anyone can register\")), WordPress allows visitors to "
@@ -107,46 +160,46 @@ msgid ""
 "include invalid (i.e. non-alphanumeric) characters."
 msgstr ""
 
-#: restrict-usernames.php:321
+#: restrict-usernames.php:108
 msgid "Possible reasons for wanting to restrict certain usernames:"
 msgstr ""
 
-#: restrict-usernames.php:323
+#: restrict-usernames.php:110
 msgid ""
 "Prevent usernames that contain foul, offensive, or otherwise undesired words"
 msgstr ""
 
-#: restrict-usernames.php:324
+#: restrict-usernames.php:111
 msgid ""
 "Prevent squatting on usernames that you may want to use in the future (but "
 "don't want to actually create the account for just yet) (essentially placing "
 "a hold on the username)"
 msgstr ""
 
-#: restrict-usernames.php:325
+#: restrict-usernames.php:112
 msgid ""
 "Prevent official-sounding usernames from being used (i.e. help, support, pr, "
 "info)"
 msgstr ""
 
-#: restrict-usernames.php:326
+#: restrict-usernames.php:113
 msgid ""
 "Prevent official username syntax from being used (i.e. if all of your admins "
 "use a prefix to identify themselves, you don't want a visitor to use that "
 "prefix)"
 msgstr ""
 
-#: restrict-usernames.php:328
+#: restrict-usernames.php:115
 msgid ""
 "When attempting to register with a restricted username, the visitor will be "
 "given an error notice that says:"
 msgstr ""
 
-#: restrict-usernames.php:329
+#: restrict-usernames.php:116
 msgid "ERROR: This username is invalid. Please enter a valid username."
 msgstr ""
 
-#: restrict-usernames.php:330
+#: restrict-usernames.php:117
 msgid ""
 "NOTE: This plugin does not put any restrictions on usernames that the admin "
 "chooses for users when creating user accounts from within the WordPress "
@@ -154,27 +207,24 @@ msgid ""
 "registering for your site."
 msgstr ""
 
-#: restrict-usernames.php:338
-msgid "Save Changes"
+#: restrict-usernames.php:208
+msgid ""
+"<strong>ERROR</strong>: This username is invalid. Please choose another."
 msgstr ""
 
-#: restrict-usernames.php:339
-msgid "Reset Settings"
+#. Plugin URI of the plugin/theme
+msgid "http://coffee2code.com/wp-plugins/restrict-usernames/"
 msgstr ""
 
-#. Plugin URI of an extension
-msgid "http://coffee2code.com/wp-plugins/restrict-usernames"
-msgstr ""
-
-#. Description of an extension
+#. Description of the plugin/theme
 msgid ""
 "Restrict the usernames that new users may use when registering for your site."
 msgstr ""
 
-#. Author of an extension
+#. Author of the plugin/theme
 msgid "Scott Reilly"
 msgstr ""
 
-#. Author URI of an extension
+#. Author URI of the plugin/theme
 msgid "http://coffee2code.com"
 msgstr ""
