@@ -3,9 +3,9 @@ Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code
 Requires at least: 2.8
-Tested up to: 3.0.1
-Stable tag: 3.0
-Version: 3.0
+Tested up to: 3.1
+Stable tag: 3.0.1
+Version: 3.0.1
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -29,6 +29,8 @@ When attempting to register with a restricted username, the visitor will be give
 ERROR: This username is invalid. Please enter a valid username.
 
 NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.
+
+Links: [Plugin Homepage]:(http://coffee2code.com/wp-plugins/restrict-usernames/) | [Author Homepage]:(http://coffee2code.com)
 
 
 == Installation ==
@@ -55,6 +57,13 @@ No.
 
 
 == Changelog ==
+
+= 3.0.1 =
+* Update plugin framework to version 021
+* Explicitly declare all class functions public
+* Delete plugin options upon uninstallation
+* Note compatibility through WP 3.1+
+* Update copyright date (2011)
 
 = 3.0 =
 * Re-implementation by extending C2C_Plugin_016, which among other things adds support for:
