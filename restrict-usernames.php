@@ -2,22 +2,26 @@
 /**
  * @package Restrict_Usernames
  * @author Scott Reilly
- * @version 3.0.1
+ * @version 3.1
  */
 /*
 Plugin Name: Restrict Usernames
-Version: 3.0.1
+Version: 3.1
 Plugin URI: http://coffee2code.com/wp-plugins/restrict-usernames/
 Author: Scott Reilly
 Author URI: http://coffee2code.com
 Text Domain: restrict-usernames
 Description: Restrict the usernames that new users may use when registering for your site.
 
-Compatible with WordPress 2.8+, 2.9+, 3.0+, 3.1+.
+Compatible with WordPress 3.0+, 3.1+, 3.2+ and BuddyPress 1.2+, 1.3+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
 =>> Or visit: http://wordpress.org/extend/plugins/restrict-usernames/
+
+TODO:
+	* Update screenshot for WP 3.2
+	* Update .pot
 
 */
 
@@ -37,12 +41,13 @@ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRA
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-if ( !class_exists( 'c2c_RestrictUsernames' ) ) :
+if ( ! class_exists( 'c2c_RestrictUsernames' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_RestrictUsernames extends C2C_Plugin_021 {
+class c2c_RestrictUsernames extends C2C_Plugin_023 {
 
+	public static $instance;
 	private $got_restricted = false;
 
 	/**
@@ -50,19 +55,35 @@ class c2c_RestrictUsernames extends C2C_Plugin_021 {
 	 *
 	 * @return void
 	 */
+	public function __construct() {
+		$this->c2c_RestrictUsernames();
+	}
+
 	public function c2c_RestrictUsernames() {
-		$this->C2C_Plugin_021( '3.0.1', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
+		// Be a singleton
+		if ( ! is_null( self::$instance ) )
+			return;
+
+		$this->C2C_Plugin_023( '3.1', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
+		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
+		self::$instance = $this;
+	}
+
+	/**
+	 * Handles activation tasks, such as registering the uninstall hook.
+	 *
+	 * @return void
+	 */
+	public function activation() {
 		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
 	}
 
 	/**
 	 * Handles uninstallation tasks, such as deleting plugin options.
 	 *
-	 * This can be overridden.
-	 *
 	 * @return void
 	 */
-	public static function uninstall() {
+	public function uninstall() {
 		delete_option( 'c2c_restrict_usernames' );
 	}
 
@@ -72,7 +93,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_021 {
 	 * @return void
 	 */
 	public function load_config() {
-		$this->name = __( 'Restrict Usernames', $this->textdomain );
+		$this->name      = __( 'Restrict Usernames', $this->textdomain );
 		$this->menu_name = __( 'Name Restrictions', $this->textdomain );
 
 		$input_style = 'style="width:50%;" rows="6"';
@@ -103,8 +124,11 @@ class c2c_RestrictUsernames extends C2C_Plugin_021 {
 	 */
 	public function register_filters() {
 //		add_filter( 'login_message', array( &$this, 'login_message' ) );
-		if ( !is_admin() ) {
-			add_filter( 'validate_username', array( &$this, 'username_restrictor' ), 10, 2 );
+		if ( ! is_admin() ) {
+			if ( defined( 'BP_VERSION' ) )
+				add_filter( 'wpmu_validate_user_signup', array( &$this, 'bp_members_validate_user_signup' ) );
+			else
+				add_filter( 'validate_username',   array( &$this, 'username_restrictor' ), 10, 2 );
 			add_filter( 'registration_errors', array( &$this, 'registration_errors' ) );
 		}
 	}
@@ -124,8 +148,8 @@ class c2c_RestrictUsernames extends C2C_Plugin_021 {
 		echo '<li>' . __( 'Prevent official-sounding usernames from being used (i.e. help, support, pr, info)', $this->textdomain ) . '</li>';
 		echo '<li>' . __( 'Prevent official username syntax from being used (i.e. if all of your admins use a prefix to identify themselves, you don\'t want a visitor to use that prefix)', $this->textdomain ) . '</li>';
 		echo '</ul>';
-		echo '<p>' . __( 'When attempting to register with a restricted username, the visitor will be given an error notice that says:', $this->textdomain ) . '<br />';
-		echo __( 'ERROR: This username is invalid. Please enter a valid username.', $this->textdomain ) . '</p>';
+		echo '<p>' . __( 'When attempting to register with a restricted username, the visitor will be given an error notice that says:', $this->textdomain ) . '<br /><blockquote>';
+		echo __( 'ERROR: This username is invalid. Please enter a valid username.', $this->textdomain ) . '</blockquote></p>';
 		echo '<p>' . __( 'NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.', $this->textdomain ) . '</p>';
 	}
 
@@ -173,14 +197,18 @@ class c2c_RestrictUsernames extends C2C_Plugin_021 {
 	 * @return bool Boolean indicating if the username is restricted. True means username is restricted (and hence not valid).
 	 */
 	public function username_restrictor( $valid, $username ) {
-		if ( !$valid || ( is_user_logged_in() && current_user_can( 'create_users' ) ) )
+		if ( ! $valid || ( is_user_logged_in() && current_user_can( 'create_users' ) ) )
 			return $valid;
+
 		$options = $this->get_options();
 		$username = strtolower( $username );
+
 		if ( $valid && $options['disallow_spaces'] && strpos( $username, ' ' ) !== false )
 			$valid = false;
+
 		if ( $valid && $options['usernames'] && in_array( $username, $options['usernames'] ) )
 			$valid = false;
+
 		if ( $valid && $options['partial_usernames'] ) {
 			foreach ( $options['partial_usernames'] as $partial ) {
 				if ( strpos( $username, $partial ) !== false )
@@ -188,6 +216,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_021 {
 					break;
 			}
 		}
+
 		if ( $valid && $options['required_partials'] ) {
 			$valid = false;
 			foreach ( $options['required_partials'] as $partial ) {
@@ -211,17 +240,63 @@ class c2c_RestrictUsernames extends C2C_Plugin_021 {
 				}
 			}
 		}
+
 		$this->got_restricted = !$valid;
 		return $valid;
 	}
 
+	/**
+	 * Register the invalid username error if it had been detected.
+	 *
+	 * @param WP_Error $errors Errors
+	 * @return WP_Error
+	 */
 	public function registration_errors( $errors ) {
 		if ( $this->got_restricted && isset( $errors->errors['invalid_username'] ) )
 			$errors->errors['invalid_username'][0] = __( '<strong>ERROR</strong>: This username is invalid. Please choose another.', $this->textdomain );
 		return $errors;
 	}
+
+	/**
+	 * Check username for restrictions under BuddyPress
+	 *
+	 * The username restriction check under BuddyPress is different than under
+	 * WP proper because BP employs its own user validation checks. While it
+	 * does pass registering usernames to validate_username() -- which this
+	 * plugin normally hooks -- any failures reported trigger BP's generic
+	 * 'Only lowercase letters and numbers allowed' error message. It's just
+	 * easier to let BP do its checks and at the very end so the username
+	 * restriction checks.
+	 *
+	 * Note: This function is hooked against the 'wpmu_validate_user_signup'
+	 * filter because it is consistently present across more BP versions,
+	 * whereas its own 'bp_core_validate_user_signup' is slated to be renamed
+	 * 'bp_members_validate_user_signup' in BP1.3.
+	 *
+	 *
+	 * @since 3.1
+	 *
+	 * @param array $result BP signup validation result array consisting of 'user_name', 'user_email', and 'errors' elements
+	 * @return array The possibly modified results array
+	 */
+	public function bp_members_validate_user_signup( $result ) {
+		// Only check username for restrictions if the username hasn't already generated some other error.
+		$errs = $result['errors']->get_error_messages( 'user_name' );
+		if ( empty( $errs ) ) {
+			$valid = $this->username_restrictor( true, $result['user_name'] );
+			if ( ! $valid ) {
+				$errors = $result['errors'];
+				$errors->add( 'user_name', __( 'Sorry, this username is invalid. Please choose another.', $this->textdomain ) );
+				$result['errors'] = $errors;
+			}
+		}
+		return $result;
+	}
+
 } // end c2c_RestrictUsernames
 
+// NOTICE: The 'c2c_restrict_usernames' global is deprecated and will be removed in the plugin's version 3.2.
+// Instead, use: c2c_RestrictUsernames::$instance
 $GLOBALS['c2c_restrict_usernames'] = new c2c_RestrictUsernames();
 
 endif; // end if !class_exists()

@@ -1,11 +1,11 @@
 === Restrict Usernames ===
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
-Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code
-Requires at least: 2.8
-Tested up to: 3.1
-Stable tag: 3.0.1
-Version: 3.0.1
+Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code, buddypress
+Requires at least: 3.0
+Tested up to: 3.2
+Stable tag: 3.1
+Version: 3.1
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -20,7 +20,7 @@ Possible reasons for wanting to restrict certain usernames:
 
 * Prevent usernames that contain foul, offensive, or otherwise undesired words
 * Prevent squatting on usernames that you may want to use in the future (but don't want to actually create the account for just yet) (essentially placing a hold on the username)
-* Prevent official-sounding usernames from being used (i.e. help, support, pr, info)
+* Prevent official-sounding usernames from being used (i.e. help, support, pr, info, sales)
 * Prevent official username syntax from being used (i.e. if all of your administrators use a prefix to identify themselves, you don't want a visitor to use that prefix)
 * Prevent spaces from being used in a username (which WordPress allows by default)
 * Require that a username begin, end, or contain one of a set of substrings (i.e. "support_", "admin_")
@@ -30,7 +30,7 @@ ERROR: This username is invalid. Please enter a valid username.
 
 NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.
 
-Links: [Plugin Homepage]:(http://coffee2code.com/wp-plugins/restrict-usernames/) | [Author Homepage]:(http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/restrict-usernames/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -50,6 +50,18 @@ No.  The plugin only prevents the usernames visitors can use when registering fo
 
 No.
 
+= If I specify restricted usernames and a required username substring, must all criteria be matched by potential usernames?
+
+Yes.
+
+= What if I define username restrictions that some existing user accounts would violate? =
+
+Nothing happens to those accounts. The plugin does not do anything with existing accounts. Existing usernames are not checked against any username restriction rules; that only happens for accounts being newly registered.
+
+= Is this BuddyPress compatible? =
+
+Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
+
 
 == Screenshots ==
 
@@ -57,6 +69,21 @@ No.
 
 
 == Changelog ==
+
+= 3.1 =
+* Add support for BuddyPress
+* Add bp_members_validate_user_signup()
+* Fix to properly register activation and uninstall hooks
+* Update plugin framework to 023
+* Save a static version of itself in class variable $instance
+* Deprecate use of global variable $c2c_restrict_usernames to store instance
+* Add __construct()
+* Note deprecation of 'c2c_restrict_usernames' global
+* Note compatibility through WP 3.2+
+* Drop support for versions of WP older than 3.0
+* Add more FAQ questions
+* Minor code formatting changes (spacing)
+* Fix plugin homepage and author links in description in readme.txt
 
 = 3.0.1 =
 * Update plugin framework to version 021
@@ -120,6 +147,9 @@ No.
 
 
 == Upgrade Notice ==
+
+= 3.1 =
+Recommended update.  Added BuddyPress compatibility; noted WP 3.2 compatibility; dropped support for versions of WP older than 3.0; updated plugin framework.
 
 = 3.0 =
 Recommended update. Highlights: re-implementation using custom plugin framework; full localization support; misc non-functionality documentation and formatting tweaks; renamed class; verified WP 3.0 compatibility; dropped support for versions of WP older than 2.8.
