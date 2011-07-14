@@ -3,7 +3,7 @@ Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code, buddypress
 Requires at least: 3.0
-Tested up to: 3.2
+Tested up to: 3.2.1
 Stable tag: 3.1
 Version: 3.1
 
@@ -29,6 +29,8 @@ When attempting to register with a restricted username, the visitor will be give
 ERROR: This username is invalid. Please enter a valid username.
 
 NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.
+
+Compatible with BuddyPress as well.
 
 Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/restrict-usernames/) | [Author Homepage](http://coffee2code.com)
 
@@ -77,7 +79,7 @@ Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
 * Update plugin framework to 023
 * Save a static version of itself in class variable $instance
 * Deprecate use of global variable $c2c_restrict_usernames to store instance
-* Add __construct()
+* Add __construct(), activation()
 * Note deprecation of 'c2c_restrict_usernames' global
 * Note compatibility through WP 3.2+
 * Drop support for versions of WP older than 3.0
@@ -149,7 +151,7 @@ Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
 == Upgrade Notice ==
 
 = 3.1 =
-Recommended update.  Added BuddyPress compatibility; noted WP 3.2 compatibility; dropped support for versions of WP older than 3.0; updated plugin framework.
+Recommended update.  Added BuddyPress compatibility; noted WP 3.2 compatibility; dropped support for versions of WP older than 3.0; updated plugin framework; and more.
 
 = 3.0 =
 Recommended update. Highlights: re-implementation using custom plugin framework; full localization support; misc non-functionality documentation and formatting tweaks; renamed class; verified WP 3.0 compatibility; dropped support for versions of WP older than 2.8.
