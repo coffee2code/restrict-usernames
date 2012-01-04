@@ -2,31 +2,27 @@
 /**
  * @package Restrict_Usernames
  * @author Scott Reilly
- * @version 3.1
+ * @version 3.2
  */
 /*
 Plugin Name: Restrict Usernames
-Version: 3.1
+Version: 3.2
 Plugin URI: http://coffee2code.com/wp-plugins/restrict-usernames/
 Author: Scott Reilly
-Author URI: http://coffee2code.com
+Author URI: http://coffee2code.com/
 Text Domain: restrict-usernames
+Domain Path: /lang/
 Description: Restrict the usernames that new users may use when registering for your site.
 
-Compatible with WordPress 3.0+, 3.1+, 3.2+ and BuddyPress 1.2+, 1.3+.
+Compatible with WordPress 3.1+, 3.2+, 3.3+ and BuddyPress 1.2+, 1.3+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
 =>> Or visit: http://wordpress.org/extend/plugins/restrict-usernames/
-
-TODO:
-	* Update screenshot for WP 3.2
-	* Update .pot
-
 */
 
 /*
-Copyright (c) 2008-2011 by Scott Reilly (aka coffee2code)
+Copyright (c) 2008-2012 by Scott Reilly (aka coffee2code)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
 files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
@@ -45,7 +41,7 @@ if ( ! class_exists( 'c2c_RestrictUsernames' ) ) :
 
 require_once( 'c2c-plugin.php' );
 
-class c2c_RestrictUsernames extends C2C_Plugin_023 {
+class c2c_RestrictUsernames extends C2C_Plugin_034 {
 
 	public static $instance;
 	private $got_restricted = false;
@@ -64,7 +60,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_023 {
 		if ( ! is_null( self::$instance ) )
 			return;
 
-		$this->C2C_Plugin_023( '3.1', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
+		parent::__construct( '3.2', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 		self::$instance = $this;
 	}
@@ -101,7 +97,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_023 {
 		$this->config = array(
 			'disallow_spaces' => array( 'input' => 'checkbox', 'default' => false,
 					'label' => __( 'Don\'t allow spaces in usernames.', $this->textdomain ),
-					'help' => __( 'WordPress allows spaces in usernames.  Check this if you don\'t want to allow spaces.', $this->textdomain ) ),
+					'help' => __( 'WordPress (single-site, not multisite) allows spaces in usernames.  Check this if you don\'t want to allow spaces.', $this->textdomain ) ),
 			'usernames' => array( 'input' => 'inline_textarea', 'datatype' => 'array', 'default' => '',
 					'input_attributes' => $input_style,
 					'label' => __( 'Restricted usernames', $this->textdomain ),
@@ -109,11 +105,13 @@ class c2c_RestrictUsernames extends C2C_Plugin_023 {
 			'partial_usernames' => array( 'input' => 'inline_textarea', 'datatype' => 'array', 'default' => '',
 					'input_attributes' => $input_style,
 					'label' => __( 'Restricted usernames (partial matching)', $this->textdomain ),
-					'help' => __( 'These are partial text values that cannot appear in usernames requested by newly-registering users.  Useful to prevent usage of bad language or prevent users from using a notation used to identify admins of the site, i.e. "admin_".  Be aware that anything listed here will then not be allowed as any part of a username.  Define one per line and use all lowercase.', $this->textdomain ) ),
+					'help' => __( 'These are partial text values that cannot appear in usernames requested by newly-registering users.  Useful to prevent usage of bad language or prevent users from using a notation used to identify admins of the site, i.e. "admin_".  Be aware that anything listed here will then not be allowed as any part of a username.  Define one per line and use all lowercase.', $this->textdomain ) .
+					( is_multisite() ? __( '<strong>NOTE: Multisite only allows numbers and lowercase letters in usernames.</strong>', $this->textdomain ) : '' ) ),
 			'required_partials' => array( 'input' => 'inline_textarea', 'datatype' => 'array', 'default' => '',
 					'input_attributes' => $input_style,
 					'label' => __( 'Required username substring', $this->textdomain ),
-					'help' => __( 'These are partial text values, one of which MUST appear in any username requested by newly-registering users.  Useful to force users to include some sort of identifier in their username, like "support_" (leading to "support_john") or "admin_" ("admin_steve"), etc.  A username needs to only include ONE of the listed partials.  Prepend a partial with "^" (i.e. "^support_" to require that partial as the start of a username) or end with "^" to require that partial be at the end (i.e. "_support^").  Without use of "^", the partial can appear in any position in the username.  Be aware that this plugin does not convey to the user what these requirements are, it only enforces the requirement.  Define one per line and use all lowercase.', $this->textdomain ) )
+					'help' => __( 'These are partial text values, one of which MUST appear in any username requested by newly-registering users.  Useful to force users to include some sort of identifier in their username, like "support_" (leading to "support_john") or "admin_" ("admin_steve"), etc.  A username needs to only include ONE of the listed partials.  Prepend a partial with "^" (i.e. "^support_" to require that partial as the start of a username) or end with "^" to require that partial be at the end (i.e. "_support^").  Without use of "^", the partial can appear in any position in the username.  Be aware that this plugin does not convey to the user what these requirements are, it only enforces the requirement.  Define one per line and use all lowercase.', $this->textdomain ) .
+					( is_multisite() ? __( '<strong>NOTE: Multisite only allows numbers and lowercase letters in usernames.</strong>', $this->textdomain ) : '' ) )
 		);
 	}
 
@@ -124,12 +122,16 @@ class c2c_RestrictUsernames extends C2C_Plugin_023 {
 	 */
 	public function register_filters() {
 //		add_filter( 'login_message', array( &$this, 'login_message' ) );
+		if ( is_multisite() ) {
+			add_action( 'network_admin_menu',     array( &$this, 'admin_menu' ) );
+			remove_action( 'admin_menu',          array( &$this, 'admin_menu' ) );
+		}
 		if ( ! is_admin() ) {
-			if ( defined( 'BP_VERSION' ) )
+			if ( is_multisite() || defined( 'BP_VERSION' ) )
 				add_filter( 'wpmu_validate_user_signup', array( &$this, 'bp_members_validate_user_signup' ) );
 			else
-				add_filter( 'validate_username',   array( &$this, 'username_restrictor' ), 10, 2 );
-			add_filter( 'registration_errors', array( &$this, 'registration_errors' ) );
+				add_filter( 'validate_username',         array( &$this, 'username_restrictor' ), 10, 2 );
+			add_filter( 'registration_errors',           array( &$this, 'registration_errors' ) );
 		}
 	}
 
@@ -140,7 +142,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_023 {
 	 */
 	public function options_page_description() {
 		parent::options_page_description( __( 'Restrict Usernames Settings', $this->textdomain ) );
-		echo '<p>' . __( 'If open registration is enabled for your site (via Settings &rarr; General &rarr; Membership ("Anyone can register")), WordPress allows visitors to register for an account on your blog.  By default, any username they choose is allowed so long as it isn\'t an already existing account and it doesn\'t include invalid (i.e. non-alphanumeric) characters.', $this->textdomain ) . '</p>';
+		echo '<p>' . __( 'If open registration is enabled for your site (via Settings &rarr; General &rarr; Membership ("Anyone can register")), WordPress allows visitors to register for an account on your blog.  By default, any username they choose is allowed so long as it isn\'t an already existing account and it doesn\'t include invalid (i.e. non-alphanumeric) characters. This plugin allows you to add further restrictions.', $this->textdomain ) . '</p>';
 		echo '<p>' . __( 'Possible reasons for wanting to restrict certain usernames:', $this->textdomain ) . '</p>';
 		echo '<ul class="c2c-plugin-list">';
 		echo '<li>' . __( 'Prevent usernames that contain foul, offensive, or otherwise undesired words', $this->textdomain ) . '</li>';
@@ -149,7 +151,11 @@ class c2c_RestrictUsernames extends C2C_Plugin_023 {
 		echo '<li>' . __( 'Prevent official username syntax from being used (i.e. if all of your admins use a prefix to identify themselves, you don\'t want a visitor to use that prefix)', $this->textdomain ) . '</li>';
 		echo '</ul>';
 		echo '<p>' . __( 'When attempting to register with a restricted username, the visitor will be given an error notice that says:', $this->textdomain ) . '<br /><blockquote>';
-		echo __( 'ERROR: This username is invalid. Please enter a valid username.', $this->textdomain ) . '</blockquote></p>';
+		if ( is_multisite() )
+			echo __( 'Sorry, this username is invalid. Please choose another.', $this->textdomain );
+		else
+			echo __( 'ERROR: This username is invalid. Please enter a valid username.', $this->textdomain );
+		echo '</blockquote></p>';
 		echo '<p>' . __( 'NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.', $this->textdomain ) . '</p>';
 	}
 
@@ -295,9 +301,8 @@ class c2c_RestrictUsernames extends C2C_Plugin_023 {
 
 } // end c2c_RestrictUsernames
 
-// NOTICE: The 'c2c_restrict_usernames' global is deprecated and will be removed in the plugin's version 3.2.
-// Instead, use: c2c_RestrictUsernames::$instance
-$GLOBALS['c2c_restrict_usernames'] = new c2c_RestrictUsernames();
+// To access plugin object instance use: c2c_RestrictUsernames::$instance
+new c2c_RestrictUsernames();
 
 endif; // end if !class_exists()
 

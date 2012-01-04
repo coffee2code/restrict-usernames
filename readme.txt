@@ -1,11 +1,11 @@
 === Restrict Usernames ===
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
-Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code, buddypress
-Requires at least: 3.0
-Tested up to: 3.2.1
-Stable tag: 3.1
-Version: 3.1
+Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code, multisite, buddypress
+Requires at least: 3.1
+Tested up to: 3.3.1
+Stable tag: 3.2
+Version: 3.2
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -30,16 +30,17 @@ ERROR: This username is invalid. Please enter a valid username.
 
 NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.
 
-Compatible with BuddyPress as well.
+Compatible with Multisite and BuddyPress as well.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/restrict-usernames/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/restrict-usernames/) | [Plugin Directory Page](http://wordpress.org/extend/plugins/restrict-usernames/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
 
+1. Whether installing or updating, whether this plugin or any other, it is always advisable to back-up your data before starting
 1. Unzip `restrict-usernames.zip` inside the `/wp-content/plugins/` directory for your site (or install via the built-in WordPress plugin installer)
-1. Activate the plugin through the 'Plugins' admin menu in WordPress
-1. Go to the Users -> Name Restrictions admin settings page.  Specify username restrictions.
+1. Activate the plugin through the 'Plugins' admin menu in WordPress. In Multisite, Network Activate the plugin.
+1. Go to the Users -> Name Restrictions admin settings page (which you can also get to via the Settings link next to the plugin on the Manage Plugins page) and specify username restrictions. On a Multisite install, go to My Sites -> Network Admin -> Users -> Name Restrictions.
 
 
 == Frequently Asked Questions ==
@@ -60,6 +61,10 @@ Yes.
 
 Nothing happens to those accounts. The plugin does not do anything with existing accounts. Existing usernames are not checked against any username restriction rules; that only happens for accounts being newly registered.
 
+= Is this Multisite compatible? =
+
+Yes.
+
 = Is this BuddyPress compatible? =
 
 Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
@@ -71,6 +76,21 @@ Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
 
 
 == Changelog ==
+
+= 3.2 =
+* Add support for Multisite
+* Update plugin framework to 034
+* Remove support for 'c2c_restrict_usernames' global
+* Note compatibility through WP 3.3+
+* Drop compatibility with versions of WP older than 3.1
+* Change parent constructor invocation
+* Create 'lang' subdirectory and move .pot file into it
+* Regenerate .pot
+* Add 'Domain Path' directive to top of main plugin file
+* Add link to plugin directory page to readme.txt
+* Tweak installation instructions in readme.txt
+* Update screenshots for WP 3.3
+* Update copyright date (2012)
 
 = 3.1 =
 * Add support for BuddyPress
@@ -150,8 +170,11 @@ Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
 
 == Upgrade Notice ==
 
+= 3.2 =
+Recommended update. Added Multisite compatibility; noted WP 3.3 compatibility; dropped support for versions of WP older than 3.1; updated plugin framework; and more.
+
 = 3.1 =
-Recommended update.  Added BuddyPress compatibility; noted WP 3.2 compatibility; dropped support for versions of WP older than 3.0; updated plugin framework; and more.
+Recommended update. Added BuddyPress compatibility; noted WP 3.2 compatibility; dropped support for versions of WP older than 3.0; updated plugin framework; and more.
 
 = 3.0 =
 Recommended update. Highlights: re-implementation using custom plugin framework; full localization support; misc non-functionality documentation and formatting tweaks; renamed class; verified WP 3.0 compatibility; dropped support for versions of WP older than 2.8.
