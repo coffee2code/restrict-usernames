@@ -2,19 +2,21 @@
 /**
  * @package Restrict_Usernames
  * @author Scott Reilly
- * @version 3.2
+ * @version 3.3
  */
 /*
 Plugin Name: Restrict Usernames
-Version: 3.2
+Version: 3.3
 Plugin URI: http://coffee2code.com/wp-plugins/restrict-usernames/
 Author: Scott Reilly
 Author URI: http://coffee2code.com/
 Text Domain: restrict-usernames
 Domain Path: /lang/
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Description: Restrict the usernames that new users may use when registering for your site.
 
-Compatible with WordPress 3.1+, 3.2+, 3.3+ and BuddyPress 1.2+, 1.3+.
+Compatible with WordPress 3.1 through 3.5+ and BuddyPress 1.2+, 1.3+.
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
@@ -22,19 +24,21 @@ Compatible with WordPress 3.1+, 3.2+, 3.3+ and BuddyPress 1.2+, 1.3+.
 */
 
 /*
-Copyright (c) 2008-2012 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2008-2013 by Scott Reilly (aka coffee2code)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following conditions:
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
-IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 if ( ! class_exists( 'c2c_RestrictUsernames' ) ) :
@@ -60,7 +64,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 		if ( ! is_null( self::$instance ) )
 			return;
 
-		parent::__construct( '3.2', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
+		parent::__construct( '3.3', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 		self::$instance = $this;
 	}
@@ -126,7 +130,11 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 			add_action( 'network_admin_menu',     array( &$this, 'admin_menu' ) );
 			remove_action( 'admin_menu',          array( &$this, 'admin_menu' ) );
 		}
-		if ( ! is_admin() ) {
+
+		if ( is_admin() ) {
+			add_action( 'admin_init',                              array( &$this, 'maybe_test_usernames' ) );
+			add_action( $this->get_hook( 'after_settings_form' ),  array( &$this, 'usernames_test_form' ) );
+		} else {
 			if ( is_multisite() || defined( 'BP_VERSION' ) )
 				add_filter( 'wpmu_validate_user_signup', array( &$this, 'bp_members_validate_user_signup' ) );
 			else
@@ -154,9 +162,45 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 		if ( is_multisite() )
 			echo __( 'Sorry, this username is invalid. Please choose another.', $this->textdomain );
 		else
-			echo __( 'ERROR: This username is invalid. Please enter a valid username.', $this->textdomain );
+			echo __( 'ERROR: This username is invalid. Please choose another.', $this->textdomain );
 		echo '</blockquote></p>';
 		echo '<p>' . __( 'NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.', $this->textdomain ) . '</p>';
+		echo '<p>' . __( 'Use the <a href="#username_check">namecheck tool</a> found below to test how the plugin would evaluate sample usernames.' ) . '</p>';
+	}
+
+	/**
+	 * Configures help tabs content.
+	 *
+	 * @since 3.3
+	 *
+	 * @return void
+	 */
+	public function help_tabs_content( $screen ) {
+		$screen->add_help_tab( array(
+			'id'      => $this->id_base . '-' . 'advanced',
+			'title'   => __( 'Advanced', $this->textdomain ),
+			'content' => <<<HTML
+			<h4>Filter</h4>
+			<p>This plugin provides a filter that can be used to do your own customized username restriction checks. Here's an example:</p>
+			<p><pre>/**
+  * Add custom checks on usernames.
+  *
+  * Specifically, prevent use of usernames ending in numbers.
+  */
+	function my_restrict_usernames_check( \$valid, \$username, \$options ) {
+		// Only do additional checking if the plugin has already performed its
+		// checks and deemed the username valid.
+		if ( \$valid ) {
+			// Don't allow usernames to end in numbers.
+			if ( preg_match( '/[0-9]+$/', \$username ) )
+				\$valid = false;
+		}
+		return \$valid;
+	}
+ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10, 3 );<pre></p>
+HTML
+		) );
+		parent::help_tabs_content( $screen );
 	}
 
 	/**
@@ -172,7 +216,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 			$ends = array();
 			$contains = array();
 			foreach ( $options['required_partials'] as $partial ) {
-				if ( $partial{0} == '^' )
+				if ( $partial[0] == '^' )
 					$starts[] = substr( $partial, 1 );
 				elseif ( substr( $partial, -1, 1 ) == '^' )
 					$ends[] = substr( $partial, 0, -1 );
@@ -203,7 +247,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 	 * @return bool Boolean indicating if the username is restricted. True means username is restricted (and hence not valid).
 	 */
 	public function username_restrictor( $valid, $username ) {
-		if ( ! $valid || ( is_user_logged_in() && current_user_can( 'create_users' ) ) )
+		if ( ! $valid || ( ! isset( $_POST['c2c_test_usernames'] ) && is_user_logged_in() && current_user_can( 'create_users' ) ) )
 			return $valid;
 
 		$options = $this->get_options();
@@ -217,16 +261,17 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 
 		if ( $valid && $options['partial_usernames'] ) {
 			foreach ( $options['partial_usernames'] as $partial ) {
-				if ( strpos( $username, $partial ) !== false )
+				if ( strpos( $username, $partial ) !== false ) {
 					$valid = false;
 					break;
+				}
 			}
 		}
 
 		if ( $valid && $options['required_partials'] ) {
 			$valid = false;
 			foreach ( $options['required_partials'] as $partial ) {
-				if ( $partial{0} == '^' ) {
+				if ( $partial[0] == '^' ) {
 					$partial = substr( $partial, 1 );
 					if ( ( $username != $partial ) && ( strpos( $username, $partial ) === 0 ) ) {
 						$valid = true;
@@ -246,6 +291,8 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 				}
 			}
 		}
+
+		$valid = apply_filters( 'c2c_restrict_usernames-validate', $valid, $username, $options );
 
 		$this->got_restricted = !$valid;
 		return $valid;
@@ -271,7 +318,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 	 * does pass registering usernames to validate_username() -- which this
 	 * plugin normally hooks -- any failures reported trigger BP's generic
 	 * 'Only lowercase letters and numbers allowed' error message. It's just
-	 * easier to let BP do its checks and at the very end so the username
+	 * easier to let BP do its checks and at the very end do the username
 	 * restriction checks.
 	 *
 	 * Note: This function is hooked against the 'wpmu_validate_user_signup'
@@ -299,11 +346,63 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 		return $result;
 	}
 
+	/**
+	 * Evaluates submitted usernames against the restrictions imposed by just
+	 * this plugin.
+	 *
+	 * @since 3.3
+	 */
+	public function maybe_test_usernames() {
+		if ( isset( $_POST[$this->get_form_submit_name( 'submit_test_usernames' )] ) && isset( $_POST['c2c_test_usernames'] ) ) {
+			check_admin_referer( $this->nonce_field );
+			$msg = __( 'Results of username checks:', $this->textdomain );
+			$msg .= '<ul>';
+			$unames= explode( ',', $_POST['c2c_test_usernames'] );
+			// The filter isn't normally added in the admin, so do so.
+			add_filter( 'validate_username', array( &$this, 'username_restrictor' ), 10, 2 );
+			$do_msg = false;
+			foreach ( $unames as $u ) {
+				$u = trim( $u );
+				if ( $u === '' )
+					continue;
+				$msg .= '<li>' . esc_html( $u ) . ' : ';
+				$msg .= validate_username( $u ) ? 'valid' : 'invalid';
+				$msg .= '</li>';
+				$do_msg = true;
+			}
+			$msg .= '</ul>';
+			$msg .= '<p>' . __( 'Bear in mind that this only checks the syntax of the username. It does not test additional criteria (such as
+				if the username already exists) that WordPress also checks for on registration.' ) . '</p>';
+			if ( $do_msg )
+				add_settings_error( 'general', 'usernames_tested', $msg, 'updated' );
+		}
+	}
+
+	/*
+	 * Outputs form to test usernames.
+	 *
+	 * @since 3.3
+	 *
+	 * @return void (Text will be echoed.)
+	 */
+	public function usernames_test_form() {
+		$user = wp_get_current_user();
+		$email = $user->user_email;
+		$action_url = $this->form_action_url();
+		echo '<div class="wrap"><h2><a name="username_check"></a>' . __( 'Test Usernames', $this->textdomain ) . "</h2>\n";
+		echo '<p>' . __( 'Use the input field below to list usernames you\'d like to test against the plugin\'s restrictions. Separate multiple usernames with commas.', $this->textdomain ) . "</p>\n";
+		echo '<p><em>You must save any changes to the form above before attempting to test usernames.</em></p>';
+		echo "<form name='c2c_restrict_usernames' action='$action_url' method='post'>\n";
+		wp_nonce_field( $this->nonce_field );
+		echo '<input type="hidden" name="' . $this->get_form_submit_name( 'submit_test_usernames' ) .'" value="1" />';
+		echo '<input type="text" size="80" name="c2c_test_usernames" />';
+		echo '<div class="submit"><input type="submit" name="Submit" class="button-primary" value="' . esc_attr__( 'Test', $this->textdomain ) . '" /></div>';
+		echo '</form></div>';
+	}
+
 } // end c2c_RestrictUsernames
 
 // To access plugin object instance use: c2c_RestrictUsernames::$instance
 new c2c_RestrictUsernames();
 
 endif; // end if !class_exists()
-
-?>

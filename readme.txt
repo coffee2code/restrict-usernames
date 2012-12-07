@@ -2,10 +2,11 @@
 Contributors: coffee2code
 Donate link: http://coffee2code.com/donate
 Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code, multisite, buddypress
+License: GPLv2 or later
 Requires at least: 3.1
-Tested up to: 3.3.1
-Stable tag: 3.2
-Version: 3.2
+Tested up to: 3.5
+Stable tag: 3.3
+Version: 3.3
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -75,7 +76,56 @@ Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
 1. A screenshot of the plugin's admin settings page.
 
 
+== Filters ==
+
+The plugin exposes one filter for hooking.  Typically, customizations utilizing this hook would be put into your active theme's functions.php file, or used by another plugin.
+
+= c2c_restrict_usernames-validate (filter) =
+
+The 'c2c_restrict_usernames-validate' hook allows you to add your own customized checks for the username being registered. You can add additional restrictions or override the assessment performed by the plugin.
+
+Arguments:
+
+* $valid (boolean): The assessment by the plugin about the validity of the username based on settings. True means username can be used.
+* $username (string): The username being registered.
+* $settings (array): The plugin's settings.
+
+Example:
+
+`
+/**
+ * Add custom checks on usernames.
+ *
+ * Specifically, prevent use of usernames ending in numbers.
+ */
+function my_restrict_usernames_check( $valid, $username, $options ) {
+	// Only do additional checking if the plugin has already performed its
+	// checks and deemed the username valid.
+	if ( $valid ) {
+		// Don't allow usernames to end in numbers.
+		if ( preg_match( '/[0-9]+$/', $username ) )
+			$valid = false;
+	}
+	return $valid;
+}
+add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10, 3 );
+`
+
 == Changelog ==
+
+= 3.3 =
+* Fix bug with partial username restriction
+* Add setting page tool for testing multiple usernames for validity
+* Add filter c2c_restrict_usernames-validate to allow adding custom restrictions
+* Add contextual help 'Advanced' tab to explain new filter
+* Add Filters section to readme
+* Use square bracket notation for string character index reference
+* Regenerate .pot
+* Re-license as GPLv2 or later (from X11)
+* Add 'License' and 'License URI' header tags to readme.txt and plugin file
+* Note compatibility through WP 3.5+
+* Remove ending PHP close tag
+* Move screenshot into repo's assets folder
 
 = 3.2 =
 * Add support for Multisite
@@ -169,6 +219,9 @@ Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
 
 
 == Upgrade Notice ==
+
+= 3.3 =
+Recommended update. Fixed bug with partial username restrictions; added filter to allow adding custom restrictions; added tool to test username restrictions; noted compatibility through WP 3.5+; and more.
 
 = 3.2 =
 Recommended update. Added Multisite compatibility; noted WP 3.3 compatibility; dropped support for versions of WP older than 3.1; updated plugin framework; and more.

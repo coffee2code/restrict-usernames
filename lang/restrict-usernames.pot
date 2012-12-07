@@ -1,11 +1,11 @@
-# Translation of the WordPress plugin Restrict Usernames v3.2 by Scott Reilly.
+# Translation of the WordPress plugin Restrict Usernames v3.3 by Scott Reilly.
 # Copyright (C) 2011 Scott Reilly
 # This file is distributed under the same license as the Restrict Usernames plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Restrict Usernames 3.2\n"
+"Project-Id-Version: Restrict Usernames 3.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/restrict-usernames\n"
-"POT-Creation-Date: 2012-01-04 18:59:50+00:00\n"
+"POT-Creation-Date: 2012-12-07 08:17:08+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,41 +89,41 @@ msgstr ""
 msgid "Did you find this plugin useful?"
 msgstr ""
 
-#. #-#-#-#-#  restrict-usernames.pot (Restrict Usernames 3.2)  #-#-#-#-#
+#. #-#-#-#-#  restrict-usernames.pot (Restrict Usernames 3.3)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: restrict-usernames.php:92
+#: restrict-usernames.php:96
 msgid "Restrict Usernames"
 msgstr ""
 
-#: restrict-usernames.php:93
+#: restrict-usernames.php:97
 msgid "Name Restrictions"
 msgstr ""
 
-#: restrict-usernames.php:99
+#: restrict-usernames.php:103
 msgid "Don't allow spaces in usernames."
 msgstr ""
 
-#: restrict-usernames.php:100
+#: restrict-usernames.php:104
 msgid ""
 "WordPress (single-site, not multisite) allows spaces in usernames.  Check "
 "this if you don't want to allow spaces."
 msgstr ""
 
-#: restrict-usernames.php:103
+#: restrict-usernames.php:107
 msgid "Restricted usernames"
 msgstr ""
 
-#: restrict-usernames.php:104
+#: restrict-usernames.php:108
 msgid ""
 "List the usernames that newly-registering users cannot use.  Define one per "
 "line and use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:107
+#: restrict-usernames.php:111
 msgid "Restricted usernames (partial matching)"
 msgstr ""
 
-#: restrict-usernames.php:108
+#: restrict-usernames.php:112
 msgid ""
 "These are partial text values that cannot appear in usernames requested by "
 "newly-registering users.  Useful to prevent usage of bad language or prevent "
@@ -132,17 +132,17 @@ msgid ""
 "any part of a username.  Define one per line and use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:109 restrict-usernames.php:114
+#: restrict-usernames.php:113 restrict-usernames.php:118
 msgid ""
 "<strong>NOTE: Multisite only allows numbers and lowercase letters in "
 "usernames.</strong>"
 msgstr ""
 
-#: restrict-usernames.php:112
+#: restrict-usernames.php:116
 msgid "Required username substring"
 msgstr ""
 
-#: restrict-usernames.php:113
+#: restrict-usernames.php:117
 msgid ""
 "These are partial text values, one of which MUST appear in any username "
 "requested by newly-registering users.  Useful to force users to include some "
@@ -157,11 +157,11 @@ msgid ""
 "use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:144
+#: restrict-usernames.php:152
 msgid "Restrict Usernames Settings"
 msgstr ""
 
-#: restrict-usernames.php:145
+#: restrict-usernames.php:153
 msgid ""
 "If open registration is enabled for your site (via Settings &rarr; General "
 "&rarr; Membership (\"Anyone can register\")), WordPress allows visitors to "
@@ -171,50 +171,50 @@ msgid ""
 "to add further restrictions."
 msgstr ""
 
-#: restrict-usernames.php:146
+#: restrict-usernames.php:154
 msgid "Possible reasons for wanting to restrict certain usernames:"
 msgstr ""
 
-#: restrict-usernames.php:148
+#: restrict-usernames.php:156
 msgid ""
 "Prevent usernames that contain foul, offensive, or otherwise undesired words"
 msgstr ""
 
-#: restrict-usernames.php:149
+#: restrict-usernames.php:157
 msgid ""
 "Prevent squatting on usernames that you may want to use in the future (but "
 "don't want to actually create the account for just yet) (essentially placing "
 "a hold on the username)"
 msgstr ""
 
-#: restrict-usernames.php:150
+#: restrict-usernames.php:158
 msgid ""
 "Prevent official-sounding usernames from being used (i.e. help, support, pr, "
 "info)"
 msgstr ""
 
-#: restrict-usernames.php:151
+#: restrict-usernames.php:159
 msgid ""
 "Prevent official username syntax from being used (i.e. if all of your admins "
 "use a prefix to identify themselves, you don't want a visitor to use that "
 "prefix)"
 msgstr ""
 
-#: restrict-usernames.php:153
+#: restrict-usernames.php:161
 msgid ""
 "When attempting to register with a restricted username, the visitor will be "
 "given an error notice that says:"
 msgstr ""
 
-#: restrict-usernames.php:155 restrict-usernames.php:295
+#: restrict-usernames.php:163 restrict-usernames.php:342
 msgid "Sorry, this username is invalid. Please choose another."
 msgstr ""
 
-#: restrict-usernames.php:157
-msgid "ERROR: This username is invalid. Please enter a valid username."
+#: restrict-usernames.php:165
+msgid "ERROR: This username is invalid. Please choose another."
 msgstr ""
 
-#: restrict-usernames.php:159
+#: restrict-usernames.php:167
 msgid ""
 "NOTE: This plugin does not put any restrictions on usernames that the admin "
 "chooses for users when creating user accounts from within the WordPress "
@@ -222,9 +222,45 @@ msgid ""
 "registering for your site."
 msgstr ""
 
-#: restrict-usernames.php:262
+#: restrict-usernames.php:168
+msgid ""
+"Use the <a href=\"#username_check\">namecheck tool</a> found below to test "
+"how the plugin would evaluate sample usernames."
+msgstr ""
+
+#: restrict-usernames.php:181
+msgid "Advanced"
+msgstr ""
+
+#: restrict-usernames.php:309
 msgid ""
 "<strong>ERROR</strong>: This username is invalid. Please choose another."
+msgstr ""
+
+#: restrict-usernames.php:358
+msgid "Results of username checks:"
+msgstr ""
+
+#: restrict-usernames.php:374
+msgid ""
+"Bear in mind that this only checks the syntax of the username. It does not "
+"test additional criteria (such as\n"
+"\t\t\t\tif the username already exists) that WordPress also checks for on "
+"registration."
+msgstr ""
+
+#: restrict-usernames.php:392
+msgid "Test Usernames"
+msgstr ""
+
+#: restrict-usernames.php:393
+msgid ""
+"Use the input field below to list usernames you'd like to test against the "
+"plugin's restrictions. Separate multiple usernames with commas."
+msgstr ""
+
+#: restrict-usernames.php:399
+msgid "Test"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
