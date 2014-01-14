@@ -1,0 +1,228 @@
+<?php
+
+class Restrict_Usernames_Test extends WP_UnitTestCase {
+
+	static function setUpBeforeClass() {
+	}
+
+	function setUp() {
+		parent::setUp();
+		$this->set_option();
+
+		$this->factory->user->create( array( 'user_login' => 'scott' ) );
+	}
+
+	function tearDown() {
+		parent::tearDown();
+
+		remove_filter( 'c2c_restrict_usernames-validate', array( $this, 'restrict_username' ), 10, 3 );
+	}
+
+
+	/**
+	 *
+	 * DATA PROVIDERS
+	 *
+	 */
+
+
+	public static function get_disallowed_usernames() {
+		return array(
+			array( 'administrator' ),
+			array( 'support' ),
+		);
+	}
+
+	public static function get_disallowed_partial_usernames() {
+		return array(
+			array( 'admin_test' ),
+			array( 'test_admin_test' ),
+			array( 'test_admin' ),
+			array( 'admintest' ),
+			array( 'ADMIN' ),
+			array( 'admin test' ),
+			array( 'xxx' ),
+			array( 'xxxx' ),
+		);
+	}
+
+	public static function get_required_partial_usernames() {
+		return array(
+			array( 'team1_bob' ),
+			array( 'team1_alice' ),
+			array( 'team2_eve' ),
+			array( 'team1_ steve' ),
+			array( 'sally_team1_' ),
+			array( 'adam team2_' ),
+			array( 'team1_' ),
+			array( 'TEAM1_ polly')
+		);
+	}
+
+	public static function get_basic_usernames() {
+		return array(
+			array( 'bob' ),
+			array( 'alice' ),
+			array( 'Eve' ),
+			array( 'joe steve' ),
+			array( 'sally' ),
+			array( 'good_guy' ),
+		);
+	}
+
+	/**
+	 *
+	 * HELPER FUNCTIONS
+	 *
+	 */
+
+
+
+	private function set_option( $settings = array() ) {
+		$defaults = array(
+			'disallow_spaces'   => false,
+			'usernames'         => array( 'administrator', 'support' ),
+			'partial_usernames' => array(),
+			'required_partials' => array(),
+			'min_length'        => '',
+			'max_length'        => '',
+		);
+		$settings = wp_parse_args( $settings, $defaults );
+		c2c_RestrictUsernames::get_instance()->update_option( $settings, true );
+	}
+
+	public function restrict_username( $valid, $username, $options ) {
+		return ( 'goodusername' === $username ) ? false : $valid;
+	}
+
+
+
+	/**
+	 *
+	 * TESTS
+	 *
+	 */
+
+
+	/**
+	 * @dataProvider get_disallowed_usernames
+	 */
+	function test_explicitly_disallowed_usernames_are_disallowed( $username ) {
+		$this->assertFalse( validate_username( $username ) );
+	}
+
+	function test_allows_spaces_by_default() {
+		$this->assertTrue( validate_username( 'space allowed' ) );
+	}
+
+	function test_setting_disallow_spaces() {
+		$this->set_option( array( 'disallow_spaces' => true ) );
+
+		$this->assertFalse( validate_username( 'space disallowed' ) );
+	}
+
+	function test_filter_c2c_restrict_usernames_validate() {
+		$this->assertTrue( validate_username( 'goodusername' ) );
+
+		add_filter( 'c2c_restrict_usernames-validate', array( $this, 'restrict_username' ), 10, 3 );
+
+		$this->assertFalse( validate_username( 'goodusername' ) );
+	}
+
+
+	/**
+	 * @dataProvider get_basic_usernames
+	 */
+	function test_accepts_usernames_not_containing_disallowed_partial_usernames( $username ) {
+		$this->set_option( array( 'partial_usernames' => array( 'admin', 'xxx' ) ) );
+
+		$this->assertTrue( validate_username( $username ) );
+	}
+
+	/**
+	 * @dataProvider get_disallowed_partial_usernames
+	 */
+	function test_rejects_usernames_containing_disallowed_partial_usernames( $username ) {
+		$this->assertTrue( validate_username( $username ) );
+
+		$this->set_option( array( 'partial_usernames' => array( 'admin', 'xxx' ) ) );
+
+		$this->assertFalse( validate_username( $username ) );
+	}
+
+	/**
+	 * @dataProvider get_required_partial_usernames
+	 */
+	function test_accepts_usernames_containing_required_partial_usernames( $username ) {
+		$this->set_option( array( 'required_partials' => array( 'team1_', 'team2_' ) ) );
+
+		$this->assertTrue( validate_username( $username ) );
+	}
+
+	function test_requires_usernames_to_start_with_required_starting_partial_username() {
+		$this->set_option( array( 'required_partials' => array( '^team1_', '^team2_' ) ) );
+
+		$this->assertTrue( validate_username( 'team1_adam' ) );
+		$this->assertTrue( validate_username( 'team1_ Bob' ) );
+
+		$this->assertFalse( validate_username( '_team1_adam' ) );
+		$this->assertFalse( validate_username( 'charlie team1_' ) );
+	}
+
+	function test_requires_usernames_to_end_with_required_ending_partial_username() {
+		$this->set_option( array( 'required_partials' => array( '_team1^', '_team2^' ) ) );
+
+		$this->assertTrue( validate_username( 'adam_team1' ) );
+		$this->assertTrue( validate_username( 'bob _team2' ) );
+
+		$this->assertFalse( validate_username( '_team1_charlie' ) );
+		$this->assertFalse( validate_username( 'dave_team1_4' ) );
+	}
+
+	/**
+	 * @dataProvider get_basic_usernames
+	 */
+	function test_rejects_usernames_missing_required_partial_usernames( $username ) {
+		$this->assertTrue( validate_username( $username ) );
+
+		$this->set_option( array( 'required_partials' => array( 'team1_', 'team2_' ) ) );
+
+		$this->assertFalse( validate_username( $username ) );
+	}
+
+	function test_no_default_min_length() {
+		$this->assertTrue( validate_username( 'u' ) );
+		$this->assertTrue( validate_username( 'us' ) );
+		$this->assertTrue( validate_username( 'use' ) );
+		$this->assertTrue( validate_username( 'user' ) );
+	}
+
+	function test_rejects_names_shorter_than_min_length() {
+		$this->set_option( array( 'min_length' => '4' ) );
+
+		$this->assertFalse( validate_username( 'u' ) );
+		$this->assertFalse( validate_username( 'us' ) );
+		$this->assertFalse( validate_username( 'use' ) );
+		$this->assertTrue( validate_username( 'user' ) );
+		$this->assertTrue( validate_username( 'users' ) );
+	}
+
+	function test_no_default_max_length() {
+		$this->assertTrue( validate_username(
+			'abcdefghijklmnopqrstuvxxyz0123456789abcdefghijklmnopqrstuvxxyz0123456789abcdefghijklmnopqrstuvxxyz0123456789abcdefghijklmnopqrstuvxxyz0123456789'
+		) );
+	}
+
+	function test_rejects_names_longer_than_max_length() {
+		$this->set_option( array( 'max_length' => '6' ) );
+
+		$this->assertTrue( validate_username( 'u' ) );
+		$this->assertTrue( validate_username( 'us' ) );
+		$this->assertTrue( validate_username( 'use' ) );
+		$this->assertTrue( validate_username( 'user' ) );
+		$this->assertTrue( validate_username( 'users' ) );
+		$this->assertTrue( validate_username( 'users0' ) );
+		$this->assertFalse( validate_username( 'users01' ) );
+		$this->assertFalse( validate_username( 'users012' ) );
+	}
+}

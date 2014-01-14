@@ -2,11 +2,11 @@
 /**
  * @package Restrict_Usernames
  * @author Scott Reilly
- * @version 3.3
+ * @version 3.4
  */
 /*
 Plugin Name: Restrict Usernames
-Version: 3.3
+Version: 3.4
 Plugin URI: http://coffee2code.com/wp-plugins/restrict-usernames/
 Author: Scott Reilly
 Author URI: http://coffee2code.com/
@@ -16,15 +16,19 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Description: Restrict the usernames that new users may use when registering for your site.
 
-Compatible with WordPress 3.1 through 3.5+ and BuddyPress 1.2+, 1.3+.
+Compatible with WordPress 3.6 through 3.8+ and BuddyPress through 1.9+.
+
+TODO:
+	* Add screenshot of username test tool and its results
+	* In test tool, provide reason for each invalid username
 
 =>> Read the accompanying readme.txt file for instructions and documentation.
 =>> Also, visit the plugin's homepage for additional information and updates.
-=>> Or visit: http://wordpress.org/extend/plugins/restrict-usernames/
+=>> Or visit: http://wordpress.org/plugins/restrict-usernames/
 */
 
 /*
-	Copyright (c) 2008-2013 by Scott Reilly (aka coffee2code)
+	Copyright (c) 2008-2014 by Scott Reilly (aka coffee2code)
 
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -33,7 +37,7 @@ Compatible with WordPress 3.1 through 3.5+ and BuddyPress 1.2+, 1.3+.
 
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
@@ -41,32 +45,44 @@ Compatible with WordPress 3.1 through 3.5+ and BuddyPress 1.2+, 1.3+.
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+defined( 'ABSPATH' ) or die();
+
 if ( ! class_exists( 'c2c_RestrictUsernames' ) ) :
 
-require_once( 'c2c-plugin.php' );
+require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 
-class c2c_RestrictUsernames extends C2C_Plugin_034 {
+class c2c_RestrictUsernames extends C2C_Plugin_037 {
 
-	public static $instance;
+	/**
+	 * @var c2c_RestrictUsernames The one true instance
+	 */
+	private static $instance;
+
+	/**
+	 * @var bool
+	 */
 	private $got_restricted = false;
 
 	/**
-	 * Constructor
+	 * Get singleton instance.
 	 *
-	 * @return void
+	 * @since 3.4
 	 */
-	public function __construct() {
-		$this->c2c_RestrictUsernames();
+	public static function get_instance() {
+		if ( ! isset( self::$instance ) )
+			self::$instance = new self();
+
+		return self::$instance;
 	}
 
-	public function c2c_RestrictUsernames() {
-		// Be a singleton
-		if ( ! is_null( self::$instance ) )
-			return;
-
-		parent::__construct( '3.3', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
+	/**
+	 * Constructor
+	 */
+	protected function __construct() {
+		parent::__construct( '3.4', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
-		self::$instance = $this;
+
+		return self::$instance = $this;
 	}
 
 	/**
@@ -101,20 +117,27 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 		$this->config = array(
 			'disallow_spaces' => array( 'input' => 'checkbox', 'default' => false,
 					'label' => __( 'Don\'t allow spaces in usernames.', $this->textdomain ),
-					'help' => __( 'WordPress (single-site, not multisite) allows spaces in usernames.  Check this if you don\'t want to allow spaces.', $this->textdomain ) ),
+					'help' => __( 'WordPress (single-site, not multisite) allows spaces in usernames. Check this if you don\'t want to allow spaces.', $this->textdomain ) ),
+			'min_length' => array( 'input' => 'short_text', 'default' => '',
+					'label' => __( 'Minimum length', $this->textdomain ),
+					'help' => __( 'Enter the mimimum number of characters that can be used in a username. Leave blank or 0 to have no limit.', $this->textdomain ) .
+						( $this->is_buddypress() ? __( 'Under BuddyPress, the minimum length is 4, which cannot be made any lower with this plugin.', $this->textdomain ) : '' ) ),
+			'max_length' => array( 'input' => 'short_text', 'default' => '',
+					'label' => __( 'Maximum length', $this->textdomain ),
+					'help' => __( 'Enter the maximum number of characters that can be used in a username. Leave blank or 0 to have no limit.', $this->textdomain ) ),
 			'usernames' => array( 'input' => 'inline_textarea', 'datatype' => 'array', 'default' => '',
 					'input_attributes' => $input_style,
 					'label' => __( 'Restricted usernames', $this->textdomain ),
-					'help' => __( 'List the usernames that newly-registering users cannot use.  Define one per line and use all lowercase.', $this->textdomain ) ),
+					'help' => __( 'List the usernames that newly-registering users cannot use. Define one per line and use all lowercase.', $this->textdomain ) ),
 			'partial_usernames' => array( 'input' => 'inline_textarea', 'datatype' => 'array', 'default' => '',
 					'input_attributes' => $input_style,
 					'label' => __( 'Restricted usernames (partial matching)', $this->textdomain ),
-					'help' => __( 'These are partial text values that cannot appear in usernames requested by newly-registering users.  Useful to prevent usage of bad language or prevent users from using a notation used to identify admins of the site, i.e. "admin_".  Be aware that anything listed here will then not be allowed as any part of a username.  Define one per line and use all lowercase.', $this->textdomain ) .
+					'help' => __( 'These are partial text values that cannot appear in usernames requested by newly-registering users. Useful to prevent usage of bad language or prevent users from using a notation used to identify admins of the site, i.e. "admin_". Be aware that anything listed here will then not be allowed as any part of a username. Define one per line and use all lowercase.', $this->textdomain ) .
 					( is_multisite() ? __( '<strong>NOTE: Multisite only allows numbers and lowercase letters in usernames.</strong>', $this->textdomain ) : '' ) ),
 			'required_partials' => array( 'input' => 'inline_textarea', 'datatype' => 'array', 'default' => '',
 					'input_attributes' => $input_style,
 					'label' => __( 'Required username substring', $this->textdomain ),
-					'help' => __( 'These are partial text values, one of which MUST appear in any username requested by newly-registering users.  Useful to force users to include some sort of identifier in their username, like "support_" (leading to "support_john") or "admin_" ("admin_steve"), etc.  A username needs to only include ONE of the listed partials.  Prepend a partial with "^" (i.e. "^support_" to require that partial as the start of a username) or end with "^" to require that partial be at the end (i.e. "_support^").  Without use of "^", the partial can appear in any position in the username.  Be aware that this plugin does not convey to the user what these requirements are, it only enforces the requirement.  Define one per line and use all lowercase.', $this->textdomain ) .
+					'help' => __( 'These are partial text values, one of which MUST appear in any username requested by newly-registering users. Useful to force users to include some sort of identifier in their username, like "support_" (leading to "support_john") or "admin_" ("admin_steve"), etc. A username needs to only include ONE of the listed partials. Prepend a partial with "^" (i.e. "^support_" to require that partial as the start of a username) or end with "^" to require that partial be at the end (i.e. "_support^"). Without use of "^", the partial can appear in any position in the username. Be aware that this plugin does not convey to the user what these requirements are, it only enforces the requirement. Define one per line and use all lowercase.', $this->textdomain ) .
 					( is_multisite() ? __( '<strong>NOTE: Multisite only allows numbers and lowercase letters in usernames.</strong>', $this->textdomain ) : '' ) )
 		);
 	}
@@ -125,46 +148,46 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 	 * @return void
 	 */
 	public function register_filters() {
-//		add_filter( 'login_message', array( &$this, 'login_message' ) );
+//		add_filter( 'login_message', array( $this, 'login_message' ) );
 		if ( is_multisite() ) {
-			add_action( 'network_admin_menu',     array( &$this, 'admin_menu' ) );
-			remove_action( 'admin_menu',          array( &$this, 'admin_menu' ) );
+			add_action( 'network_admin_menu',     array( $this, 'admin_menu' ) );
+			remove_action( 'admin_menu',          array( $this, 'admin_menu' ) );
 		}
 
 		if ( is_admin() ) {
-			add_action( 'admin_init',                              array( &$this, 'maybe_test_usernames' ) );
-			add_action( $this->get_hook( 'after_settings_form' ),  array( &$this, 'usernames_test_form' ) );
+			add_action( 'admin_init',                              array( $this, 'show_settings_message' ), 20 );
+			add_action( 'admin_init',                              array( $this, 'maybe_test_usernames' ) );
+			add_action( $this->get_hook( 'after_settings_form' ),  array( $this, 'usernames_test_form' ) );
 		} else {
-			if ( is_multisite() || defined( 'BP_VERSION' ) )
-				add_filter( 'wpmu_validate_user_signup', array( &$this, 'bp_members_validate_user_signup' ) );
-			else
-				add_filter( 'validate_username',         array( &$this, 'username_restrictor' ), 10, 2 );
-			add_filter( 'registration_errors',           array( &$this, 'registration_errors' ) );
+			if ( is_multisite() || defined( 'BP_VERSION' ) ) {
+				add_filter( 'wpmu_validate_user_signup', array( $this, 'bp_members_validate_user_signup' ) );
+				// TODO: Switch using the previous filter and use the following filter
+				//add_filter( 'bp_core_validate_user_signup', array( $this, 'bp_members_validate_user_signup' ) );
+			} else {
+				add_filter( 'validate_username',         array( $this, 'username_restrictor' ), 10, 2 );
+			}
+			add_filter( 'registration_errors',           array( $this, 'registration_errors' ) );
 		}
+	}
+
+	/**
+	 * Shows the settings errors/messages.
+	 *
+	 * @since 3.4
+	 */
+	public function show_settings_message() {
+		settings_errors();
 	}
 
 	/**
 	 * Outputs the text above the setting form
 	 *
+	 * @param  string $localized_heading_text (optional) Localized page heading text.
 	 * @return void (Text will be echoed.)
 	 */
-	public function options_page_description() {
+	public function options_page_description( $localized_heading_text = '' ) {
 		parent::options_page_description( __( 'Restrict Usernames Settings', $this->textdomain ) );
-		echo '<p>' . __( 'If open registration is enabled for your site (via Settings &rarr; General &rarr; Membership ("Anyone can register")), WordPress allows visitors to register for an account on your blog.  By default, any username they choose is allowed so long as it isn\'t an already existing account and it doesn\'t include invalid (i.e. non-alphanumeric) characters. This plugin allows you to add further restrictions.', $this->textdomain ) . '</p>';
-		echo '<p>' . __( 'Possible reasons for wanting to restrict certain usernames:', $this->textdomain ) . '</p>';
-		echo '<ul class="c2c-plugin-list">';
-		echo '<li>' . __( 'Prevent usernames that contain foul, offensive, or otherwise undesired words', $this->textdomain ) . '</li>';
-		echo '<li>' . __( 'Prevent squatting on usernames that you may want to use in the future (but don\'t want to actually create the account for just yet) (essentially placing a hold on the username)', $this->textdomain ) . '</li>';
-		echo '<li>' . __( 'Prevent official-sounding usernames from being used (i.e. help, support, pr, info)', $this->textdomain ) . '</li>';
-		echo '<li>' . __( 'Prevent official username syntax from being used (i.e. if all of your admins use a prefix to identify themselves, you don\'t want a visitor to use that prefix)', $this->textdomain ) . '</li>';
-		echo '</ul>';
-		echo '<p>' . __( 'When attempting to register with a restricted username, the visitor will be given an error notice that says:', $this->textdomain ) . '<br /><blockquote>';
-		if ( is_multisite() )
-			echo __( 'Sorry, this username is invalid. Please choose another.', $this->textdomain );
-		else
-			echo __( 'ERROR: This username is invalid. Please choose another.', $this->textdomain );
-		echo '</blockquote></p>';
-		echo '<p>' . __( 'NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin.  This only restricts the names that users choose themselves when registering for your site.', $this->textdomain ) . '</p>';
+		echo '<p>' . __( 'NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin. This only restricts the names that users choose when registering themselves for the site.', $this->textdomain ) . '</p>';
 		echo '<p>' . __( 'Use the <a href="#username_check">namecheck tool</a> found below to test how the plugin would evaluate sample usernames.' ) . '</p>';
 	}
 
@@ -176,6 +199,30 @@ class c2c_RestrictUsernames extends C2C_Plugin_034 {
 	 * @return void
 	 */
 	public function help_tabs_content( $screen ) {
+		$screen->add_help_tab( array(
+			'id'      => $this->id_base . '-' . 'about',
+			'title'   => __( 'About', $this->textdomain ),
+			'content' =>
+				'<p>' . __( 'If open registration is enabled for your site (via Settings &rarr; General &rarr; Membership ("Anyone can register")), WordPress allows visitors to register for an account on your blog. By default, any username they choose is allowed so long as it isn\'t an already existing account and it doesn\'t include invalid (i.e. non-alphanumeric) characters. This plugin allows you to add further restrictions.', $this->textdomain ) . '</p>' .
+				'<p>' . __( 'Possible reasons for wanting to restrict certain usernames:', $this->textdomain ) . '</p>' .
+				'<ul class="c2c-plugin-list">' .
+				'<li>' . __( 'Prevent usernames that contain foul, offensive, or otherwise undesired words', $this->textdomain ) . '</li>' .
+				'<li>' . __( 'Prevent squatting on usernames that you may want to use in the future (but don\'t want to actually create the account for just yet) (essentially placing a hold on the username)', $this->textdomain ) . '</li>' .
+				'<li>' . __( 'Prevent official-sounding usernames from being used (i.e. help, support, pr, info)', $this->textdomain ) . '</li>' .
+				'<li>' . __( 'Prevent official username syntax from being used (i.e. if all of your admins use a prefix to identify themselves, you don\'t want a visitor to use that prefix)', $this->textdomain ) . '</li>' .
+				'<li>' . __( 'Prevent spaces from being used in a username (which WordPress allows by default)', $this->textdomain ) . '</li>' .
+				'<li>' . __( 'Require that a username starts with, ends with, or contain one of a set of substrings (i.e. "support_", "admin_")', $this->textdomain ) . '</li>' .
+				'<li>' . __( 'Require a minimum number of characters for usernames', $this->textdomain ) . '</li>' .
+				'<li>' . __( 'Limit usernames to a maximum number of characters', $this->textdomain ) . '</li>' .
+				'</ul>' .
+				'<p>' . __( 'When attempting to register with a restricted username, the visitor will be given an error notice that says:', $this->textdomain ) . '<br /><blockquote>' .
+				( is_multisite() ?
+					__( 'Sorry, this username is invalid. Please choose another.', $this->textdomain ) :
+					__( 'ERROR: This username is invalid. Please choose another.', $this->textdomain )
+				) .
+				'</blockquote></p>'
+		) );
+
 		$screen->add_help_tab( array(
 			'id'      => $this->id_base . '-' . 'advanced',
 			'title'   => __( 'Advanced', $this->textdomain ),
@@ -204,9 +251,21 @@ HTML
 	}
 
 	/**
+	 * Determines if the plugin is running under BuddyPress and its username
+	 * checks are being performed.
+	 *
+	 * @since 3.5
+	 *
+	 * @return bool
+	 */
+	protected function is_buddypress() {
+		return ( defined( 'BP_VERSION' ) && ! function_exists( 'wpmu_validate_user_signup' ) );
+	}
+
+	/**
 	 * Outputs message to login page to tell visitor valid user syntax for usernames.
 	 *
-	 * @param string $message Pending login message.
+	 * @param  string $message Pending login message.
 	 * @return string The incoming login message appended with text regarding valid user syntax.
 	 */
 /*	public function login_message( $message ) {
@@ -242,22 +301,36 @@ HTML
 	/**
 	 * Assesses if a username is restricted from use.
 	 *
-	 * @param bool $valid A boolean indicating WordPress's built-in assessment of the validity of the username.
-	 * @param string $username The username to check for possible restriction.
+	 * @param  bool   $valid A boolean indicating WordPress's built-in assessment of the validity of the username.
+	 * @param  string $username The username to check for possible restriction.
 	 * @return bool Boolean indicating if the username is restricted. True means username is restricted (and hence not valid).
 	 */
 	public function username_restrictor( $valid, $username ) {
-		if ( ! $valid || ( ! isset( $_POST['c2c_test_usernames'] ) && is_user_logged_in() && current_user_can( 'create_users' ) ) )
+		// If existing username checks have already rejected the username, there is no need to check further.
+		// Or if the check is on behalf of a logged in user who can create users (and isn't running the
+		// username tester) skip all of this plugin's checks and return current assessment.
+		if ( ! $valid || ( ! isset( $_POST['c2c_test_usernames'] ) && is_user_logged_in() && current_user_can( 'create_users' ) ) ) {
 			return $valid;
+		}
 
-		$options = $this->get_options();
+		$options  = $this->get_options();
 		$username = strtolower( $username );
 
-		if ( $valid && $options['disallow_spaces'] && strpos( $username, ' ' ) !== false )
+		if ( $valid && $options['disallow_spaces'] && strpos( $username, ' ' ) !== false ) {
 			$valid = false;
+		}
 
-		if ( $valid && $options['usernames'] && in_array( $username, $options['usernames'] ) )
+		if ( $valid && $options['usernames'] && in_array( $username, $options['usernames'] ) ) {
 			$valid = false;
+		}
+
+		if ( $valid && ! empty( $options['min_length'] ) && strlen( $username ) < intval( $options['min_length'] ) ) {
+			$valid = false;
+		}
+
+		if ( $valid && ! empty( $options['max_length'] ) && strlen( $username ) > intval( $options['max_length'] ) ) {
+			$valid = false;
+		}
 
 		if ( $valid && $options['partial_usernames'] ) {
 			foreach ( $options['partial_usernames'] as $partial ) {
@@ -301,12 +374,14 @@ HTML
 	/**
 	 * Register the invalid username error if it had been detected.
 	 *
-	 * @param WP_Error $errors Errors
+	 * @param  WP_Error $errors Errors
 	 * @return WP_Error
 	 */
 	public function registration_errors( $errors ) {
-		if ( $this->got_restricted && isset( $errors->errors['invalid_username'] ) )
+		if ( $this->got_restricted && isset( $errors->errors['invalid_username'] ) ) {
 			$errors->errors['invalid_username'][0] = __( '<strong>ERROR</strong>: This username is invalid. Please choose another.', $this->textdomain );
+		}
+
 		return $errors;
 	}
 
@@ -321,15 +396,9 @@ HTML
 	 * easier to let BP do its checks and at the very end do the username
 	 * restriction checks.
 	 *
-	 * Note: This function is hooked against the 'wpmu_validate_user_signup'
-	 * filter because it is consistently present across more BP versions,
-	 * whereas its own 'bp_core_validate_user_signup' is slated to be renamed
-	 * 'bp_members_validate_user_signup' in BP1.3.
-	 *
-	 *
 	 * @since 3.1
 	 *
-	 * @param array $result BP signup validation result array consisting of 'user_name', 'user_email', and 'errors' elements
+	 * @param  array $result BP signup validation result array consisting of 'user_name', 'user_email', and 'errors' elements
 	 * @return array The possibly modified results array
 	 */
 	public function bp_members_validate_user_signup( $result ) {
@@ -343,6 +412,7 @@ HTML
 				$result['errors'] = $errors;
 			}
 		}
+
 		return $result;
 	}
 
@@ -353,28 +423,36 @@ HTML
 	 * @since 3.3
 	 */
 	public function maybe_test_usernames() {
-		if ( isset( $_POST[$this->get_form_submit_name( 'submit_test_usernames' )] ) && isset( $_POST['c2c_test_usernames'] ) ) {
+		if ( isset( $_POST[ $this->get_form_submit_name( 'submit_test_usernames' ) ] ) && isset( $_POST['c2c_test_usernames'] ) ) {
 			check_admin_referer( $this->nonce_field );
+
 			$msg = __( 'Results of username checks:', $this->textdomain );
-			$msg .= '<ul>';
-			$unames= explode( ',', $_POST['c2c_test_usernames'] );
+			$msg .= '<ul style="padding-left: 20px; list-style: inherit;">';
+			$unames = explode( ',', $_POST['c2c_test_usernames'] );
+
 			// The filter isn't normally added in the admin, so do so.
-			add_filter( 'validate_username', array( &$this, 'username_restrictor' ), 10, 2 );
+			add_filter( 'validate_username', array( $this, 'username_restrictor' ), 10, 2 );
 			$do_msg = false;
+
 			foreach ( $unames as $u ) {
 				$u = trim( $u );
-				if ( $u === '' )
+				if ( $u === '' ) {
 					continue;
-				$msg .= '<li>' . esc_html( $u ) . ' : ';
-				$msg .= validate_username( $u ) ? 'valid' : 'invalid';
+				}
+				$msg .= '<li style="margin-bottom: 0;">' . esc_html( $u ) . ' : ';
+				$msg .= validate_username( $u ) ?
+					sprintf( '<span style="color: green;">%s</span>', __( 'valid', $this->textdomain ) ) :
+					sprintf( '<span style="color: red;">%s</span>', __( 'invalid', $this->textdomain ) );
 				$msg .= '</li>';
 				$do_msg = true;
 			}
 			$msg .= '</ul>';
-			$msg .= '<p>' . __( 'Bear in mind that this only checks the syntax of the username. It does not test additional criteria (such as
+			$msg .= '<p>' . __( 'Bear in mind that this only checks the syntax of the username against the rules and restrictions controlled below. It does not test additional criteria (such as
 				if the username already exists) that WordPress also checks for on registration.' ) . '</p>';
-			if ( $do_msg )
-				add_settings_error( 'general', 'usernames_tested', $msg, 'updated' );
+
+			if ( $do_msg ) {
+				add_settings_error( $this->admin_options_name, 'usernames_tested', $msg, 'updated' );
+			}
 		}
 	}
 
@@ -386,9 +464,10 @@ HTML
 	 * @return void (Text will be echoed.)
 	 */
 	public function usernames_test_form() {
-		$user = wp_get_current_user();
-		$email = $user->user_email;
+		$user       = wp_get_current_user();
+		$email      = $user->user_email;
 		$action_url = $this->form_action_url();
+
 		echo '<div class="wrap"><h2><a name="username_check"></a>' . __( 'Test Usernames', $this->textdomain ) . "</h2>\n";
 		echo '<p>' . __( 'Use the input field below to list usernames you\'d like to test against the plugin\'s restrictions. Separate multiple usernames with commas.', $this->textdomain ) . "</p>\n";
 		echo '<p><em>You must save any changes to the form above before attempting to test usernames.</em></p>';
@@ -402,7 +481,6 @@ HTML
 
 } // end c2c_RestrictUsernames
 
-// To access plugin object instance use: c2c_RestrictUsernames::$instance
-new c2c_RestrictUsernames();
+c2c_RestrictUsernames::get_instance();
 
 endif; // end if !class_exists()
