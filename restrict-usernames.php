@@ -2,11 +2,11 @@
 /**
  * @package Restrict_Usernames
  * @author Scott Reilly
- * @version 3.4
+ * @version 3.4.1
  */
 /*
 Plugin Name: Restrict Usernames
-Version: 3.4
+Version: 3.4.1
 Plugin URI: http://coffee2code.com/wp-plugins/restrict-usernames/
 Author: Scott Reilly
 Author URI: http://coffee2code.com/
@@ -79,7 +79,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_037 {
 	 * Constructor
 	 */
 	protected function __construct() {
-		parent::__construct( '3.4', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
+		parent::__construct( '3.4.1', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -155,7 +155,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_037 {
 		}
 
 		if ( is_admin() ) {
-			add_action( 'admin_init',                              array( $this, 'show_settings_message' ), 20 );
+			add_action( 'all_admin_notices',                       array( $this, 'show_settings_message' ), 20 );
 			add_action( 'admin_init',                              array( $this, 'maybe_test_usernames' ) );
 			add_action( $this->get_hook( 'after_settings_form' ),  array( $this, 'usernames_test_form' ) );
 		} else {
@@ -176,7 +176,9 @@ class c2c_RestrictUsernames extends C2C_Plugin_037 {
 	 * @since 3.4
 	 */
 	public function show_settings_message() {
-		settings_errors();
+		if ( $this->is_plugin_admin_page() ) {
+			settings_errors();
+		}
 	}
 
 	/**

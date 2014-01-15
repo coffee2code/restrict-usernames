@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.6
 Tested up to: 3.8
-Stable tag: 3.4
+Stable tag: 3.4.1
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -119,6 +119,9 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 == Changelog ==
 
+= 3.4.1 (2014-01-15) =
+* Bugfix to prevent plugin from causing admin error/notice messages to appear twice
+
 = 3.4 (2014-01-14) =
 * Fix to display settings page update messages and username test tool results
 * Add setting to optionally enforce minimum length for usernames
@@ -145,7 +148,6 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 * Minor code reformatting (spacing, bracing)
 * Note compatibility through WP 3.8+
 * Drop compatibility with version of WP older than 3.6
-* Add comments explaining use of base64_encode and base64_decode
 * Update copyright date (2014)
 * Regenerate .pot
 * Change donate link
@@ -260,6 +262,9 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 
 == Upgrade Notice ==
+
+= 3.4.1 =
+Recommended bugfix: fixed bug that caused admin error/notice messages to appear twice
 
 = 3.4 =
 Recommended update: minor bug fixes; added ability to enforce username minimum and maximum length; added unit tests; updated plugin framework; compatibility now WP 3.6-3.8+
