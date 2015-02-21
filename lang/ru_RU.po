@@ -1,0 +1,417 @@
+# Translation of the WordPress plugin Restrict Usernames v3.4 by Scott Reilly.
+# Copyright (C) 2014 Scott Reilly
+# This file is distributed under the same license as the Restrict Usernames plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Restrict Usernames 3.4\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/restrict-"
+"usernames\n"
+"POT-Creation-Date: 2014-01-14 19:24:28+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-07-08 16:32+0400\n"
+"Last-Translator: Kolya Korobochkin <me@korobochkin.com>\n"
+"Language-Team: Kolya Korobochkin <me@korobochkin.com>\n"
+"X-Generator: Poedit 1.6.6\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: ru\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: c2c-plugin.php:75
+msgid "Invalid file specified for C2C_Plugin: %s"
+msgstr "Указан неверный файл для C2C_Plugin: %s"
+
+#: c2c-plugin.php:125 c2c-plugin.php:132
+msgid "Cheatin&#8217; huh?"
+msgstr "Хакер, что ли?"
+
+#: c2c-plugin.php:309
+msgid "See the \"Help\" link to the top-right of the page for more help."
+msgstr "Ссылка «Помощь» в правом верхнем углу для дополнительной информации."
+
+#: c2c-plugin.php:342
+msgid "Settings reset."
+msgstr "Настройки сброшены."
+
+#: c2c-plugin.php:353 c2c-plugin.php:361
+msgid "A value is required for: \"%s\""
+msgstr "Требуется значение для: «%s»"
+
+#: c2c-plugin.php:370
+msgid "Expected integer value for: %s"
+msgstr "Ожидалось целочисленное значение для %s"
+
+#: c2c-plugin.php:482
+msgid "More information about %1$s %2$s"
+msgstr "Больше информации о %1$s %2$s"
+
+#: c2c-plugin.php:483
+msgid "Click for more help on this plugin"
+msgstr "Больше информации об этом плагине"
+
+#: c2c-plugin.php:484
+msgid " (especially check out the \"Other Notes\" tab, if present)"
+msgstr " (обязательно проверьте вкладку «Примечания», если она есть)"
+
+#: c2c-plugin.php:598
+msgid "More Help"
+msgstr "Дополнительная помощь"
+
+#: c2c-plugin.php:610
+msgid "Settings"
+msgstr "Настройки"
+
+#: c2c-plugin.php:622
+msgid "Donation for coffee2code plugin: %s"
+msgstr "Пожертвование для плагина coffee2code: %s"
+
+#: c2c-plugin.php:623
+msgid "Coffee fuels my coding."
+msgstr "Кофе усиливает мои навыки программирования."
+
+#: c2c-plugin.php:876
+msgid "A plugin by coffee2code"
+msgstr "Плагин от coffee2code"
+
+#: c2c-plugin.php:885
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+#: c2c-plugin.php:886
+msgid "Reset Settings"
+msgstr "Сбросить настройки"
+
+#: c2c-plugin.php:892
+msgid "Scott Reilly, aka coffee2code"
+msgstr "Scott Reilly или coffee2code"
+
+#: c2c-plugin.php:893
+msgid "This plugin brought to you by %s."
+msgstr "%s купил этот плагин для вас."
+
+#: c2c-plugin.php:894
+msgid "Please consider a donation"
+msgstr "Пожалуйста, подумайте о пожертвовании"
+
+#: c2c-plugin.php:895
+msgid "Did you find this plugin useful?"
+msgstr "Считаете этот плагин полезным?"
+
+#. Plugin Name of the plugin/theme
+#: restrict-usernames.php:108
+msgid "Restrict Usernames"
+msgstr "Ограничения для имен пользователей"
+
+#: restrict-usernames.php:109
+msgid "Name Restrictions"
+msgstr "Ограничения"
+
+#: restrict-usernames.php:115
+msgid "Don't allow spaces in usernames."
+msgstr "Запретить использовать пробелы в именах пользователей."
+
+#: restrict-usernames.php:116
+msgid ""
+"WordPress (single-site, not multisite) allows spaces in usernames. Check "
+"this if you don't want to allow spaces."
+msgstr ""
+"WordPress в режиме одиночного сайта, в отличие от режима Multisite, "
+"разрешает использовать пробелы в именах пользователей. Поставьте галочку, "
+"если вы не хотите, чтобы в именах пользователей можно было использовать "
+"пробелы."
+
+#: restrict-usernames.php:118
+msgid "Minimum length"
+msgstr "Минимальная длина"
+
+#: restrict-usernames.php:119
+msgid ""
+"Enter the mimimum number of characters that can be used in a username. Leave "
+"blank or 0 to have no limit."
+msgstr ""
+"Минимальное число символов в имени пользователя. Оставьте поле пустым или "
+"укажите 0, чтобы снять ограничение."
+
+#: restrict-usernames.php:120
+msgid ""
+"Under BuddyPress, the minimum length is 4, which cannot be made any lower "
+"with this plugin."
+msgstr ""
+"Если вы используете BuddyPress, то минимальная длина составляет 4 символа. "
+"Это значение нельзя сделать меньше с помощью данного плагина."
+
+#: restrict-usernames.php:122
+msgid "Maximum length"
+msgstr "Максимальная длина"
+
+#: restrict-usernames.php:123
+msgid ""
+"Enter the maximum number of characters that can be used in a username. Leave "
+"blank or 0 to have no limit."
+msgstr ""
+"Максимальное число символов в имени пользователя. Оставьте поле пустым или "
+"укажите 0, чтобы снять ограничение."
+
+#: restrict-usernames.php:126
+msgid "Restricted usernames"
+msgstr "Запрещенные имена пользователей"
+
+#: restrict-usernames.php:127
+msgid ""
+"List the usernames that newly-registering users cannot use. Define one per "
+"line and use all lowercase."
+msgstr ""
+"Список имен пользователей, которые не могут быть использованы при "
+"регистрации новых аккаунтов. Указывайте каждое имя пользователя на отдельной "
+"строчке и используйте буквы в нижнем регистре (строчные)."
+
+#: restrict-usernames.php:130
+msgid "Restricted usernames (partial matching)"
+msgstr "Запрещенные имена пользователей (частичное совпадение)"
+
+#: restrict-usernames.php:131
+msgid ""
+"These are partial text values that cannot appear in usernames requested by "
+"newly-registering users. Useful to prevent usage of bad language or prevent "
+"users from using a notation used to identify admins of the site, i.e. "
+"\"admin_\". Be aware that anything listed here will then not be allowed as "
+"any part of a username. Define one per line and use all lowercase."
+msgstr ""
+"Эти значения не могут содержаться в именах пользователей при регистрации "
+"новых аккаунтов. Полезно для фильтрации матных слов или запрета имен "
+"пользователей, в которых есть слово «admin». Имена пользователей, в которых "
+"содержится хотя бы одно из значений, будут недоступны для регистрации. "
+"Указывайте каждое значение на отдельной строчке и используйте буквы в нижнем "
+"регистре (строчные)."
+
+#: restrict-usernames.php:132 restrict-usernames.php:137
+msgid ""
+"<strong>NOTE: Multisite only allows numbers and lowercase letters in "
+"usernames.</strong>"
+msgstr ""
+"<strong>Примечание: Multisite разрешает использовать только цифры и буквы в "
+"нижнем регистре (строчные) в именах пользователей.</strong>"
+
+#: restrict-usernames.php:135
+msgid "Required username substring"
+msgstr "Обязательная подстрока в имени пользователя"
+
+#: restrict-usernames.php:136
+msgid ""
+"These are partial text values, one of which MUST appear in any username "
+"requested by newly-registering users. Useful to force users to include some "
+"sort of identifier in their username, like \"support_\" (leading to "
+"\"support_john\") or \"admin_\" (\"admin_steve\"), etc. A username needs to "
+"only include ONE of the listed partials. Prepend a partial with \"^\" (i.e. "
+"\"^support_\" to require that partial as the start of a username) or end "
+"with \"^\" to require that partial be at the end (i.e. \"_support^\"). "
+"Without use of \"^\", the partial can appear in any position in the "
+"username. Be aware that this plugin does not convey to the user what these "
+"requirements are, it only enforces the requirement. Define one per line and "
+"use all lowercase."
+msgstr ""
+"Хотя бы одно из этих значений должно содержаться в имени пользователя при "
+"регистрации. Пригодится, если в имени пользователя должен быть некий "
+"идентификатор, например, «suppot_» (support_john) или "
+"«admin_» (admin_steve). Используйте символ «^», например, «^support_», чтобы "
+"указать, что значение должно быть в самом начале или «_support^», чтобы "
+"указать, что значение должно быть в самом конце. Если символа «^» нет, то "
+"значение может быть в любом месте имени пользователя.Имейте ввиду, что на "
+"странице регистрации плагин не сообщает какие именно имена пользователей "
+"можно использовать, он лишь проверяет их и выдает ошибку, если имя "
+"пользователя не подходит.Указывайте каждое значение на отдельной строчке и "
+"используйте буквы в нижнем регистре (строчные)."
+
+#: restrict-usernames.php:185
+msgid "Restrict Usernames Settings"
+msgstr "Настройки ограничений имен пользователей"
+
+#: restrict-usernames.php:186
+msgid ""
+"NOTE: This plugin does not put any restrictions on usernames that the admin "
+"chooses for users when creating user accounts from within the WordPress "
+"admin. This only restricts the names that users choose when registering "
+"themselves for the site."
+msgstr ""
+"Примечание. Плагин не накладывает каких-либо ограничений на имена "
+"пользователей, когда администратор создает аккаунт в разделе «Пользователи»."
+
+#: restrict-usernames.php:187
+msgid ""
+"Use the <a href=\"#username_check\">namecheck tool</a> found below to test "
+"how the plugin would evaluate sample usernames."
+msgstr ""
+"Воспользуйтесь <a href=\"#username_check\">инструментом проверки имен "
+"пользователей</a> размещенном внизу страницы, чтобы проверить, как плагин "
+"отреагирует на имена пользователей."
+
+#: restrict-usernames.php:200
+msgid "About"
+msgstr "Обзор"
+
+#: restrict-usernames.php:202
+msgid ""
+"If open registration is enabled for your site (via Settings &rarr; General "
+"&rarr; Membership (\"Anyone can register\")), WordPress allows visitors to "
+"register for an account on your blog. By default, any username they choose "
+"is allowed so long as it isn't an already existing account and it doesn't "
+"include invalid (i.e. non-alphanumeric) characters. This plugin allows you "
+"to add further restrictions."
+msgstr ""
+"Если открытая регистрация включена (Настройки &rarr; Общие &rarr; Членство. "
+"Любой может зарегистрироваться), WordPress позволяет посетителям создавать "
+"аккаунты на вашем блоге. По умолчанию разрешены любые имена пользователей, "
+"какими бы длинными они не былы, если только оно не занято кем-то другим или "
+"содержит что-то кроме букв и цифр. Данный плагин позволяет добавить "
+"некоторые ограничения на имена пользователей."
+
+#: restrict-usernames.php:203
+msgid "Possible reasons for wanting to restrict certain usernames:"
+msgstr "Плагин может пригодится для следующих задач:"
+
+#: restrict-usernames.php:205
+msgid ""
+"Prevent usernames that contain foul, offensive, or otherwise undesired words"
+msgstr ""
+"Предотвратить использование нецензурных, оскорбительных или каких-то других "
+"нежелательных слов."
+
+#: restrict-usernames.php:206
+msgid ""
+"Prevent squatting on usernames that you may want to use in the future (but "
+"don't want to actually create the account for just yet) (essentially placing "
+"a hold on the username)"
+msgstr ""
+"Предотвратить захват красивых имен пользователей, которые сейчас не нужны, "
+"но могут понадобится в будущем."
+
+#: restrict-usernames.php:207
+msgid ""
+"Prevent official-sounding usernames from being used (i.e. help, support, pr, "
+"info)"
+msgstr ""
+"Запретить регистрацию «официальных» имен пользователей, например, admin, "
+"support, info, help и т. п."
+
+#: restrict-usernames.php:208
+msgid ""
+"Prevent official username syntax from being used (i.e. if all of your admins "
+"use a prefix to identify themselves, you don't want a visitor to use that "
+"prefix)"
+msgstr ""
+"Запретить использовать обычным посетителям использовать какие-то префиксы в "
+"именах пользователей, которые используют только администраторы. Например, "
+"все администраторы используют имена вида admin_steve, а обычным "
+"пользователям нельзя создавать аккаунты с префиксом «admin_»."
+
+#: restrict-usernames.php:209
+msgid ""
+"Prevent spaces from being used in a username (which WordPress allows by "
+"default)"
+msgstr ""
+"Запретить использовать пробелы в именах пользователей (WordPress разрешает "
+"их по умолчанию)."
+
+#: restrict-usernames.php:210
+msgid ""
+"Require that a username starts with, ends with, or contain one of a set of "
+"substrings (i.e. \"support_\", \"admin_\")"
+msgstr ""
+"Имя пользователя обязательно должно начинаться с какого-то значения, "
+"содержать его или оканчиваться им (support_, admin_)."
+
+#: restrict-usernames.php:211
+msgid "Require a minimum number of characters for usernames"
+msgstr "Требовать минимальную длину имени пользователя."
+
+#: restrict-usernames.php:212
+msgid "Limit usernames to a maximum number of characters"
+msgstr "Ограничить максимальную длину имени пользователя."
+
+#: restrict-usernames.php:214
+msgid ""
+"When attempting to register with a restricted username, the visitor will be "
+"given an error notice that says:"
+msgstr ""
+"При попытке зарегистрироваться с именем пользователя, которое не подходит по "
+"заданным правилам, пользователь увидит ошибку:"
+
+#: restrict-usernames.php:216 restrict-usernames.php:407
+msgid "Sorry, this username is invalid. Please choose another."
+msgstr "Извините, это имя пользователя не подходит. Выберите другое."
+
+#: restrict-usernames.php:217
+msgid "ERROR: This username is invalid. Please choose another."
+msgstr "Ошибка: имя пользователя не подходит. Выберите другое."
+
+#: restrict-usernames.php:224
+msgid "Advanced"
+msgstr "Дополнительные возможности"
+
+#: restrict-usernames.php:378
+msgid ""
+"<strong>ERROR</strong>: This username is invalid. Please choose another."
+msgstr ""
+"<strong>Ошибка:</strong> Имя пользователя не подходит. Выберите другое."
+
+#: restrict-usernames.php:425
+msgid "Results of username checks:"
+msgstr "Результаты проверки имени пользователя:"
+
+#: restrict-usernames.php:440
+msgid "valid"
+msgstr "допустимо"
+
+#: restrict-usernames.php:441
+msgid "invalid"
+msgstr "недопустимо"
+
+#: restrict-usernames.php:446
+msgid ""
+"Bear in mind that this only checks the syntax of the username against the "
+"rules and restrictions controlled below. It does not test additional "
+"criteria (such as\n"
+"\t\t\t\tif the username already exists) that WordPress also checks for on "
+"registration."
+msgstr ""
+"Плагин проверяет лишь правильность имен пользователей по указанным правилам "
+"и ограничениям. Дополнительные проверки, например «существует ли такое имя "
+"пользователя», которые WordPress делает при регистрации, здесь не "
+"производятся."
+
+#: restrict-usernames.php:467
+msgid "Test Usernames"
+msgstr "Проверка имен пользователей"
+
+#: restrict-usernames.php:468
+msgid ""
+"Use the input field below to list usernames you'd like to test against the "
+"plugin's restrictions. Separate multiple usernames with commas."
+msgstr ""
+"Введите имя пользователя, чтобы проверить подходит ли оно. Разделяйте имена "
+"запятыми."
+
+#: restrict-usernames.php:474
+msgid "Test"
+msgstr "Проверить"
+
+#. Plugin URI of the plugin/theme
+msgid "http://coffee2code.com/wp-plugins/restrict-usernames/"
+msgstr "http://coffee2code.com/wp-plugins/restrict-usernames/"
+
+#. Description of the plugin/theme
+msgid ""
+"Restrict the usernames that new users may use when registering for your site."
+msgstr ""
+"Установите ограничения для имен пользователей, которые можно использовать "
+"при регистрации новых аккаунтов на вашем сайте."
+
+#. Author of the plugin/theme
+msgid "Scott Reilly"
+msgstr "Скотт Рейли"
+
+#. Author URI of the plugin/theme
+msgid "http://coffee2code.com/"
+msgstr "http://coffee2code.com/"

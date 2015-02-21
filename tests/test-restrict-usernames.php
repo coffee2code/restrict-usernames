@@ -19,7 +19,8 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	}
 
 
-	/**
+
+	/*
 	 *
 	 * DATA PROVIDERS
 	 *
@@ -70,7 +71,9 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 		);
 	}
 
-	/**
+
+
+	/*
 	 *
 	 * HELPER FUNCTIONS
 	 *
@@ -97,12 +100,29 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 
 
 
-	/**
+	/*
 	 *
 	 * TESTS
 	 *
 	 */
 
+
+
+	function test_class_exists() {
+		$this->assertTrue( class_exists( 'c2c_RestrictUsernames' ) );
+	}
+
+	function test_plugin_framework_class_name() {
+		$this->assertTrue( class_exists( 'C2C_Plugin_039' ) );
+	}
+
+	function test_version() {
+		$this->assertEquals( '3.5', c2c_RestrictUsernames::get_instance()->version() );
+	}
+
+	function test_instance_object_is_returned() {
+		$this->assertTrue( is_a( c2c_RestrictUsernames::get_instance(), 'c2c_RestrictUsernames' ) );
+	}
 
 	/**
 	 * @dataProvider get_disallowed_usernames
@@ -128,7 +148,6 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 
 		$this->assertFalse( validate_username( 'goodusername' ) );
 	}
-
 
 	/**
 	 * @dataProvider get_basic_usernames

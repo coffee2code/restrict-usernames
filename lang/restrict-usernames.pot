@@ -1,16 +1,16 @@
-# Translation of the WordPress plugin Restrict Usernames v3.4 by Scott Reilly.
+# Translation of the WordPress plugin Restrict Usernames v3.5 by Scott Reilly.
 # Copyright (C) 2014 Scott Reilly
 # This file is distributed under the same license as the Restrict Usernames plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Restrict Usernames 3.4\n"
+"Project-Id-Version: Restrict Usernames 3.5\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/restrict-"
 "usernames\n"
-"POT-Creation-Date: 2014-01-14 19:24:28+00:00\n"
+"POT-Creation-Date: 2015-02-21 08:42:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
@@ -18,143 +18,143 @@ msgstr ""
 msgid "Invalid file specified for C2C_Plugin: %s"
 msgstr ""
 
-#: c2c-plugin.php:125 c2c-plugin.php:132
+#: c2c-plugin.php:127 c2c-plugin.php:134
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: c2c-plugin.php:309
+#: c2c-plugin.php:322
 msgid "See the \"Help\" link to the top-right of the page for more help."
 msgstr ""
 
-#: c2c-plugin.php:342
+#: c2c-plugin.php:357
 msgid "Settings reset."
 msgstr ""
 
-#: c2c-plugin.php:353 c2c-plugin.php:361
+#: c2c-plugin.php:368 c2c-plugin.php:376
 msgid "A value is required for: \"%s\""
 msgstr ""
 
-#: c2c-plugin.php:370
+#: c2c-plugin.php:385
 msgid "Expected integer value for: %s"
 msgstr ""
 
-#: c2c-plugin.php:482
+#: c2c-plugin.php:502
 msgid "More information about %1$s %2$s"
 msgstr ""
 
-#: c2c-plugin.php:483
+#: c2c-plugin.php:503
 msgid "Click for more help on this plugin"
 msgstr ""
 
-#: c2c-plugin.php:484
+#: c2c-plugin.php:504
 msgid " (especially check out the \"Other Notes\" tab, if present)"
 msgstr ""
 
-#: c2c-plugin.php:598
+#: c2c-plugin.php:620
 msgid "More Help"
 msgstr ""
 
-#: c2c-plugin.php:610
+#: c2c-plugin.php:632
 msgid "Settings"
 msgstr ""
 
-#: c2c-plugin.php:622
+#: c2c-plugin.php:644
 msgid "Donation for coffee2code plugin: %s"
 msgstr ""
 
-#: c2c-plugin.php:623
+#: c2c-plugin.php:645
 msgid "Coffee fuels my coding."
 msgstr ""
 
-#: c2c-plugin.php:876
+#: c2c-plugin.php:914
 msgid "A plugin by coffee2code"
 msgstr ""
 
-#: c2c-plugin.php:885
+#: c2c-plugin.php:923
 msgid "Save Changes"
 msgstr ""
 
-#: c2c-plugin.php:886
+#: c2c-plugin.php:924
 msgid "Reset Settings"
 msgstr ""
 
-#: c2c-plugin.php:892
+#: c2c-plugin.php:930
 msgid "Scott Reilly, aka coffee2code"
 msgstr ""
 
-#: c2c-plugin.php:893
+#: c2c-plugin.php:931
 msgid "This plugin brought to you by %s."
 msgstr ""
 
-#: c2c-plugin.php:894
+#: c2c-plugin.php:932
 msgid "Please consider a donation"
 msgstr ""
 
-#: c2c-plugin.php:895
+#: c2c-plugin.php:933
 msgid "Did you find this plugin useful?"
 msgstr ""
 
-#. #-#-#-#-#  restrict-usernames.pot (Restrict Usernames 3.4)  #-#-#-#-#
+#. #-#-#-#-#  restrict-usernames.pot (Restrict Usernames 3.5)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
-#: restrict-usernames.php:108
+#: restrict-usernames.php:110
 msgid "Restrict Usernames"
 msgstr ""
 
-#: restrict-usernames.php:109
+#: restrict-usernames.php:111
 msgid "Name Restrictions"
 msgstr ""
 
-#: restrict-usernames.php:115
+#: restrict-usernames.php:117
 msgid "Don't allow spaces in usernames."
 msgstr ""
 
-#: restrict-usernames.php:116
+#: restrict-usernames.php:118
 msgid ""
 "WordPress (single-site, not multisite) allows spaces in usernames. Check "
 "this if you don't want to allow spaces."
 msgstr ""
 
-#: restrict-usernames.php:118
+#: restrict-usernames.php:120
 msgid "Minimum length"
 msgstr ""
 
-#: restrict-usernames.php:119
+#: restrict-usernames.php:121
 msgid ""
 "Enter the mimimum number of characters that can be used in a username. Leave "
 "blank or 0 to have no limit."
 msgstr ""
 
-#: restrict-usernames.php:120
+#: restrict-usernames.php:122
 msgid ""
 "Under BuddyPress, the minimum length is 4, which cannot be made any lower "
 "with this plugin."
 msgstr ""
 
-#: restrict-usernames.php:122
+#: restrict-usernames.php:124
 msgid "Maximum length"
 msgstr ""
 
-#: restrict-usernames.php:123
+#: restrict-usernames.php:125
 msgid ""
 "Enter the maximum number of characters that can be used in a username. Leave "
 "blank or 0 to have no limit."
 msgstr ""
 
-#: restrict-usernames.php:126
+#: restrict-usernames.php:128
 msgid "Restricted usernames"
 msgstr ""
 
-#: restrict-usernames.php:127
+#: restrict-usernames.php:129
 msgid ""
 "List the usernames that newly-registering users cannot use. Define one per "
 "line and use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:130
+#: restrict-usernames.php:132
 msgid "Restricted usernames (partial matching)"
 msgstr ""
 
-#: restrict-usernames.php:131
+#: restrict-usernames.php:133
 msgid ""
 "These are partial text values that cannot appear in usernames requested by "
 "newly-registering users. Useful to prevent usage of bad language or prevent "
@@ -163,17 +163,17 @@ msgid ""
 "any part of a username. Define one per line and use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:132 restrict-usernames.php:137
+#: restrict-usernames.php:134 restrict-usernames.php:139
 msgid ""
 "<strong>NOTE: Multisite only allows numbers and lowercase letters in "
 "usernames.</strong>"
 msgstr ""
 
-#: restrict-usernames.php:135
+#: restrict-usernames.php:137
 msgid "Required username substring"
 msgstr ""
 
-#: restrict-usernames.php:136
+#: restrict-usernames.php:138
 msgid ""
 "These are partial text values, one of which MUST appear in any username "
 "requested by newly-registering users. Useful to force users to include some "
@@ -188,11 +188,11 @@ msgid ""
 "use all lowercase."
 msgstr ""
 
-#: restrict-usernames.php:185
+#: restrict-usernames.php:186
 msgid "Restrict Usernames Settings"
 msgstr ""
 
-#: restrict-usernames.php:186
+#: restrict-usernames.php:187
 msgid ""
 "NOTE: This plugin does not put any restrictions on usernames that the admin "
 "chooses for users when creating user accounts from within the WordPress "
@@ -200,17 +200,17 @@ msgid ""
 "themselves for the site."
 msgstr ""
 
-#: restrict-usernames.php:187
+#: restrict-usernames.php:188
 msgid ""
 "Use the <a href=\"#username_check\">namecheck tool</a> found below to test "
 "how the plugin would evaluate sample usernames."
 msgstr ""
 
-#: restrict-usernames.php:200
+#: restrict-usernames.php:199
 msgid "About"
 msgstr ""
 
-#: restrict-usernames.php:202
+#: restrict-usernames.php:201
 msgid ""
 "If open registration is enabled for your site (via Settings &rarr; General "
 "&rarr; Membership (\"Anyone can register\")), WordPress allows visitors to "
@@ -220,91 +220,91 @@ msgid ""
 "to add further restrictions."
 msgstr ""
 
-#: restrict-usernames.php:203
+#: restrict-usernames.php:202
 msgid "Possible reasons for wanting to restrict certain usernames:"
 msgstr ""
 
-#: restrict-usernames.php:205
+#: restrict-usernames.php:204
 msgid ""
 "Prevent usernames that contain foul, offensive, or otherwise undesired words"
 msgstr ""
 
-#: restrict-usernames.php:206
+#: restrict-usernames.php:205
 msgid ""
 "Prevent squatting on usernames that you may want to use in the future (but "
 "don't want to actually create the account for just yet) (essentially placing "
 "a hold on the username)"
 msgstr ""
 
-#: restrict-usernames.php:207
+#: restrict-usernames.php:206
 msgid ""
 "Prevent official-sounding usernames from being used (i.e. help, support, pr, "
 "info)"
 msgstr ""
 
-#: restrict-usernames.php:208
+#: restrict-usernames.php:207
 msgid ""
 "Prevent official username syntax from being used (i.e. if all of your admins "
 "use a prefix to identify themselves, you don't want a visitor to use that "
 "prefix)"
 msgstr ""
 
-#: restrict-usernames.php:209
+#: restrict-usernames.php:208
 msgid ""
 "Prevent spaces from being used in a username (which WordPress allows by "
 "default)"
 msgstr ""
 
-#: restrict-usernames.php:210
+#: restrict-usernames.php:209
 msgid ""
 "Require that a username starts with, ends with, or contain one of a set of "
 "substrings (i.e. \"support_\", \"admin_\")"
 msgstr ""
 
-#: restrict-usernames.php:211
+#: restrict-usernames.php:210
 msgid "Require a minimum number of characters for usernames"
 msgstr ""
 
-#: restrict-usernames.php:212
+#: restrict-usernames.php:211
 msgid "Limit usernames to a maximum number of characters"
 msgstr ""
 
-#: restrict-usernames.php:214
+#: restrict-usernames.php:213
 msgid ""
 "When attempting to register with a restricted username, the visitor will be "
 "given an error notice that says:"
 msgstr ""
 
-#: restrict-usernames.php:216 restrict-usernames.php:407
+#: restrict-usernames.php:215 restrict-usernames.php:406
 msgid "Sorry, this username is invalid. Please choose another."
 msgstr ""
 
-#: restrict-usernames.php:217
+#: restrict-usernames.php:216
 msgid "ERROR: This username is invalid. Please choose another."
 msgstr ""
 
-#: restrict-usernames.php:224
+#: restrict-usernames.php:223
 msgid "Advanced"
 msgstr ""
 
-#: restrict-usernames.php:378
+#: restrict-usernames.php:377
 msgid ""
 "<strong>ERROR</strong>: This username is invalid. Please choose another."
 msgstr ""
 
-#: restrict-usernames.php:425
+#: restrict-usernames.php:424
 msgid "Results of username checks:"
 msgstr ""
 
-#: restrict-usernames.php:440
+#: restrict-usernames.php:439
 msgid "valid"
 msgstr ""
 
-#: restrict-usernames.php:441
+#: restrict-usernames.php:440
 msgid "invalid"
 msgstr ""
 
-#: restrict-usernames.php:446
+#: restrict-usernames.php:445
 msgid ""
 "Bear in mind that this only checks the syntax of the username against the "
 "rules and restrictions controlled below. It does not test additional "
@@ -313,17 +313,17 @@ msgid ""
 "registration."
 msgstr ""
 
-#: restrict-usernames.php:467
+#: restrict-usernames.php:464
 msgid "Test Usernames"
 msgstr ""
 
-#: restrict-usernames.php:468
+#: restrict-usernames.php:465
 msgid ""
 "Use the input field below to list usernames you'd like to test against the "
 "plugin's restrictions. Separate multiple usernames with commas."
 msgstr ""
 
-#: restrict-usernames.php:474
+#: restrict-usernames.php:471
 msgid "Test"
 msgstr ""
 

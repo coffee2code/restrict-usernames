@@ -5,8 +5,8 @@ Tags: registration, username, signup, users, restrictions, security, privacy, co
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.6
-Tested up to: 3.8
-Stable tag: 3.4.1
+Tested up to: 4.1
+Stable tag: 3.5
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -35,7 +35,7 @@ NOTE: This plugin does not put any restrictions on usernames that the admin choo
 
 Compatible with Multisite and BuddyPress as well.
 
-Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/restrict-usernames/) | [Plugin Directory Page](http://wordpress.org/plugins/restrict-usernames/) | [Author Homepage](http://coffee2code.com)
+Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/restrict-usernames/) | [Plugin Directory Page](https://wordpress.org/plugins/restrict-usernames/) | [Author Homepage](http://coffee2code.com)
 
 
 == Installation ==
@@ -62,7 +62,15 @@ Yes.
 
 = What if I define username restrictions that some existing user accounts would violate? =
 
-Nothing happens to those accounts. The plugin does not do anything with existing accounts. Existing usernames are not checked against any username restriction rules; that only happens for accounts being newly registered.
+Nothing happens to those accounts. The plugin does not do anything with existing accounts. Existing usernames are not checked against any username restriction rules; that only happens for accounts being newly registered on the front-end.
+
+= Does the plugin inform users about restrictions when they are about to register for the site? =
+
+No. The next version will likely add a way for you to optionallly specify a message to be displayed to those registering for a user account.
+
+= Does the plugin indicate what specific restriction was violated for a failed registration? =
+
+No. A generic "ERROR: This username is invalid. Please choose another." is reported.
 
 = Is this Multisite compatible? =
 
@@ -118,6 +126,20 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 `
 
 == Changelog ==
+
+= 3.5 (2015-02-20) =
+* Fix error message handling to override misleading default WP registration error message
+* Update plugin framework to 039
+* Add more unit tests
+* Explicitly declare `activation()` and `uninstall()` static
+* Reformat plugin header
+* Change documentation links to wp.org to be https
+* Minor documentation spacing changes throughout
+* Note compatibility through WP 4.1+
+* Update copyright date (2015)
+* Add plugin icon
+* Add Russian translation. props Kolya Korobochkin
+* Regenerate .pot
 
 = 3.4.1 (2014-01-15) =
 * Bugfix to prevent plugin from causing admin error/notice messages to appear twice
@@ -262,6 +284,9 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 
 == Upgrade Notice ==
+
+= 3.5 =
+Minor update: fixed bug with error message reporting; added more unit tests; updated plugin framework to 039; noted compatibility through WP 4.1+; added plugin icon
 
 = 3.4.1 =
 Recommended bugfix: fixed bug that caused admin error/notice messages to appear twice
