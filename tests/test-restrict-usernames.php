@@ -117,7 +117,7 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	}
 
 	function test_version() {
-		$this->assertEquals( '3.5', c2c_RestrictUsernames::get_instance()->version() );
+		$this->assertEquals( '3.5.1', c2c_RestrictUsernames::get_instance()->version() );
 	}
 
 	function test_instance_object_is_returned() {

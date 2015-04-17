@@ -5,8 +5,8 @@ Tags: registration, username, signup, users, restrictions, security, privacy, co
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 3.6
-Tested up to: 4.1
-Stable tag: 3.5
+Tested up to: 4.2
+Stable tag: 3.5.1
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -126,6 +126,9 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 `
 
 == Changelog ==
+
+= 3.5.1 (2015-04-16) =
+* Bugfix: compatibility fix for versions of WP older than 4.1; `$error->remove()` was introduced in 4.1
 
 = 3.5 (2015-02-20) =
 * Fix error message handling to override misleading default WP registration error message
@@ -284,6 +287,9 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 
 == Upgrade Notice ==
+
+= 3.5.1 =
+Recommended bugfix release: fixes compatibility for versions of WordPress older than 4.1
 
 = 3.5 =
 Minor update: fixed bug with error message reporting; added more unit tests; updated plugin framework to 039; noted compatibility through WP 4.1+; added plugin icon

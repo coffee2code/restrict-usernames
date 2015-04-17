@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Restrict Usernames
- * Version:     3.5
+ * Version:     3.5.1
  * Plugin URI:  http://coffee2code.com/wp-plugins/restrict-usernames/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -11,7 +11,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Description: Restrict the usernames that new users may use when registering for your site.
  *
- * Compatible with WordPress 3.6 through 4.1+ and BuddyPress through 1.9+.
+ * Compatible with WordPress 3.6 through 4.2+ and BuddyPress through 1.9+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
@@ -19,7 +19,7 @@
  *
  * @package Restrict_Usernames
  * @author Scott Reilly
- * @version 3.5
+ * @version 3.5.1
  */
 
 /*
@@ -87,7 +87,7 @@ class c2c_RestrictUsernames extends C2C_Plugin_039 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.5', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
+		parent::__construct( '3.5.1', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
@@ -377,7 +377,13 @@ HTML
 	 */
 	public function registration_errors( $errors ) {
 		if ( $this->got_restricted ) {
-			$errors->remove( 'invalid_username' );
+			if ( method_exists( $errors, 'remove' ) ) {
+				$errors->remove( 'invalid_username' );
+			} else { // Pre-WP4.1 compatibility
+				unset( $errors->errors['invalid_username'] );
+				unset( $errors->error_data['invalid_username'] );
+			}
+
 			$errors->add( 'invalid_username', __( '<strong>ERROR</strong>: This username is invalid. Please choose another.', $this->textdomain ), 'invalid_username' );
 		}
 
