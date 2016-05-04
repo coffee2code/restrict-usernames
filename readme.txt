@@ -4,9 +4,9 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: registration, username, signup, users, restrictions, security, privacy, coffee2code, multisite, buddypress
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 3.6
-Tested up to: 4.2
-Stable tag: 3.5.1
+Requires at least: 4.1
+Tested up to: 4.5
+Stable tag: 3.6
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -32,6 +32,8 @@ When attempting to register with a restricted username, the visitor will be give
 ERROR: This username is invalid. Please enter a valid username.
 
 NOTE: This plugin does not put any restrictions on usernames that the admin chooses for users when creating user accounts from within the WordPress admin. This only restricts the names that users choose themselves when registering for your site.
+
+SPECIAL NOTE: Many membership plugins implement their own user registration handling that often bypasses checks (and hooks) performed by WordPress. As such, it is unlikely that the plugin is compatible with them without special plugin-specific amendments.
 
 Compatible with Multisite and BuddyPress as well.
 
@@ -72,13 +74,17 @@ No. The next version will likely add a way for you to optionallly specify a mess
 
 No. A generic "ERROR: This username is invalid. Please choose another." is reported.
 
+= Does this work with the membership plugin I have running on my site? =
+
+Most likely not. Many membership plugins implement their own user registration handling that often bypasses checks (and hooks) performed by WordPress. As such, it is unlikely that the plugin is compatible with them without special plugin-specific amendments.
+
 = Is this Multisite compatible? =
 
 Yes.
 
 = Is this BuddyPress compatible? =
 
-Yes, for at least BuddyPress 1.2+ and 1.3+, and perhaps other versions.
+Yes, for at least BuddyPress 1.2+ through 2.6+, and perhaps other versions.
 
 = Does this plugin include unit tests? =
 
@@ -111,14 +117,19 @@ Example:
  * Add custom checks on usernames.
  *
  * Specifically, prevent use of usernames ending in numbers.
+ *
+ * @param bool   $valid    True if the username is valid, false if not.
+ * @param string $username The username.
+ * @param array  $options  Plugin options.
  */
 function my_restrict_usernames_check( $valid, $username, $options ) {
 	// Only do additional checking if the plugin has already performed its
 	// checks and deemed the username valid.
 	if ( $valid ) {
 		// Don't allow usernames to end in numbers.
-		if ( preg_match( '/[0-9]+$/', $username ) )
+		if ( preg_match( '/[0-9]+$/', $username ) ) {
 			$valid = false;
+		}
 	}
 	return $valid;
 }
@@ -126,6 +137,35 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 `
 
 == Changelog ==
+
+= 3.6 (2016-05-03) =
+Highlights:
+* This release largely consists of minor behind-the-scenes changes.
+
+Details:
+* Change: Update plugin framework to 042:
+    * Change class name to c2c_RestrictUsernames_Plugin_042 to be plugin-specific.
+    * Set textdomain using a string instead of a variable.
+    * Don't load textdomain from file.
+    * Change admin page header from 'h2' to 'h1' tag.
+    * Add `c2c_plugin_version()`.
+    * Formatting improvements to inline docs.
+* Change: Add support for language packs:
+    * Set textdomain using a string instead of a variable.
+    * Remove .pot file and /lang subdirectory.
+* Change: Amend description for max_length setting to indicate WP already enforces a max length of 60, which the plugin cannot increase.
+* New: Hook 'illegal_user_logins' filter to add in usernames explicitly prohibited by the plugin.
+* New: Add special note and FAQ item to readme indicating the likely lack of compatibility with membership plugins that have custom registration handling.
+* Change: Declare class as final.
+* Change: Explicitly declare methods in unit tests as public or protected.
+* Change: Minor code reformatting.
+* Change: Minor improvements to inline docs and test docs.
+* Change: Prevent web invocation of unit test bootstrap.php.
+* New: Add LICENSE file.
+* New: Create empty index.php to prevent files from being listed if web server has enabled directory listings.
+* Change: Note compatibility through WP 4.5+.
+* Change: Remove support for versions of WordPress older than 4.1.
+* Change: Update copyright date (2016).
 
 = 3.5.1 (2015-04-16) =
 * Bugfix: compatibility fix for versions of WP older than 4.1; `$error->remove()` was introduced in 4.1
@@ -287,6 +327,9 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 
 == Upgrade Notice ==
+
+= 3.6 =
+Recommended update: improved support for localization; verified compatibility through WP 4.5; removed compatibility with WP earlier than 4.1; updated copyright date (2016)
 
 = 3.5.1 =
 Recommended bugfix release: fixes compatibility for versions of WordPress older than 4.1

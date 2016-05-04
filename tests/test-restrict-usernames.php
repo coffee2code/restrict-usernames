@@ -1,30 +1,31 @@
 <?php
 
+defined( 'ABSPATH' ) or die();
+
 class Restrict_Usernames_Test extends WP_UnitTestCase {
 
 	static function setUpBeforeClass() {
 	}
 
-	function setUp() {
+	public function setUp() {
 		parent::setUp();
 		$this->set_option();
 
 		$this->factory->user->create( array( 'user_login' => 'scott' ) );
 	}
 
-	function tearDown() {
+	public function tearDown() {
 		parent::tearDown();
 
 		remove_filter( 'c2c_restrict_usernames-validate', array( $this, 'restrict_username' ), 10, 3 );
 	}
 
 
-
-	/*
-	 *
-	 * DATA PROVIDERS
-	 *
-	 */
+	//
+	//
+	// DATA PROVIDERS
+	//
+	//
 
 
 	public static function get_disallowed_usernames() {
@@ -72,13 +73,11 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	}
 
 
-
-	/*
-	 *
-	 * HELPER FUNCTIONS
-	 *
-	 */
-
+	//
+	//
+	// HELPER FUNCTIONS
+	//
+	//
 
 
 	private function set_option( $settings = array() ) {
@@ -99,49 +98,51 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	}
 
 
-
-	/*
-	 *
-	 * TESTS
-	 *
-	 */
-
+	//
+	//
+	// TESTS
+	//
+	//
 
 
-	function test_class_exists() {
+	public function test_class_exists() {
 		$this->assertTrue( class_exists( 'c2c_RestrictUsernames' ) );
 	}
 
-	function test_plugin_framework_class_name() {
-		$this->assertTrue( class_exists( 'C2C_Plugin_039' ) );
+	public function test_plugin_framework_class_name() {
+		$this->assertTrue( class_exists( 'c2c_RestrictUsernames_Plugin_042' ) );
 	}
 
-	function test_version() {
-		$this->assertEquals( '3.5.1', c2c_RestrictUsernames::get_instance()->version() );
+	public function test_plugin_framework_version() {
+		$this->assertEquals( '042', c2c_RestrictUsernames::get_instance()->c2c_plugin_version() );
 	}
 
-	function test_instance_object_is_returned() {
+	public function test_version() {
+		$this->assertEquals( '3.6', c2c_RestrictUsernames::get_instance()->version() );
+	}
+
+	public function test_instance_object_is_returned() {
 		$this->assertTrue( is_a( c2c_RestrictUsernames::get_instance(), 'c2c_RestrictUsernames' ) );
 	}
 
 	/**
 	 * @dataProvider get_disallowed_usernames
 	 */
-	function test_explicitly_disallowed_usernames_are_disallowed( $username ) {
+	public function test_explicitly_disallowed_usernames_are_disallowed( $username ) {
 		$this->assertFalse( validate_username( $username ) );
 	}
 
-	function test_allows_spaces_by_default() {
+	public function test_allows_spaces_by_default() {
 		$this->assertTrue( validate_username( 'space allowed' ) );
 	}
 
-	function test_setting_disallow_spaces() {
-		$this->set_option( array( 'disallow_spaces' => true ) );
+	public function test_setting_disallow_spaces() {
+		$this->set_option( array( 'disallow_spaces' => '1' ) );
 
 		$this->assertFalse( validate_username( 'space disallowed' ) );
 	}
 
-	function test_filter_c2c_restrict_usernames_validate() {
+	public function test_filter_c2c_restrict_usernames_validate() {
 		$this->assertTrue( validate_username( 'goodusername' ) );
 
 		add_filter( 'c2c_restrict_usernames-validate', array( $this, 'restrict_username' ), 10, 3 );
@@ -152,7 +153,7 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	/**
 	 * @dataProvider get_basic_usernames
 	 */
-	function test_accepts_usernames_not_containing_disallowed_partial_usernames( $username ) {
+	public function test_accepts_usernames_not_containing_disallowed_partial_usernames( $username ) {
 		$this->set_option( array( 'partial_usernames' => array( 'admin', 'xxx' ) ) );
 
 		$this->assertTrue( validate_username( $username ) );
@@ -161,7 +162,7 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	/**
 	 * @dataProvider get_disallowed_partial_usernames
 	 */
-	function test_rejects_usernames_containing_disallowed_partial_usernames( $username ) {
+	public function test_rejects_usernames_containing_disallowed_partial_usernames( $username ) {
 		$this->assertTrue( validate_username( $username ) );
 
 		$this->set_option( array( 'partial_usernames' => array( 'admin', 'xxx' ) ) );
@@ -172,13 +173,13 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	/**
 	 * @dataProvider get_required_partial_usernames
 	 */
-	function test_accepts_usernames_containing_required_partial_usernames( $username ) {
+	public function test_accepts_usernames_containing_required_partial_usernames( $username ) {
 		$this->set_option( array( 'required_partials' => array( 'team1_', 'team2_' ) ) );
 
 		$this->assertTrue( validate_username( $username ) );
 	}
 
-	function test_requires_usernames_to_start_with_required_starting_partial_username() {
+	public function test_requires_usernames_to_start_with_required_starting_partial_username() {
 		$this->set_option( array( 'required_partials' => array( '^team1_', '^team2_' ) ) );
 
 		$this->assertTrue( validate_username( 'team1_adam' ) );
@@ -188,7 +189,7 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 		$this->assertFalse( validate_username( 'charlie team1_' ) );
 	}
 
-	function test_requires_usernames_to_end_with_required_ending_partial_username() {
+	public function test_requires_usernames_to_end_with_required_ending_partial_username() {
 		$this->set_option( array( 'required_partials' => array( '_team1^', '_team2^' ) ) );
 
 		$this->assertTrue( validate_username( 'adam_team1' ) );
@@ -201,7 +202,7 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	/**
 	 * @dataProvider get_basic_usernames
 	 */
-	function test_rejects_usernames_missing_required_partial_usernames( $username ) {
+	public function test_rejects_usernames_missing_required_partial_usernames( $username ) {
 		$this->assertTrue( validate_username( $username ) );
 
 		$this->set_option( array( 'required_partials' => array( 'team1_', 'team2_' ) ) );
@@ -209,14 +210,14 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 		$this->assertFalse( validate_username( $username ) );
 	}
 
-	function test_no_default_min_length() {
+	public function test_no_default_min_length() {
 		$this->assertTrue( validate_username( 'u' ) );
 		$this->assertTrue( validate_username( 'us' ) );
 		$this->assertTrue( validate_username( 'use' ) );
 		$this->assertTrue( validate_username( 'user' ) );
 	}
 
-	function test_rejects_names_shorter_than_min_length() {
+	public function test_rejects_names_shorter_than_min_length() {
 		$this->set_option( array( 'min_length' => '4' ) );
 
 		$this->assertFalse( validate_username( 'u' ) );
@@ -226,13 +227,13 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 		$this->assertTrue( validate_username( 'users' ) );
 	}
 
-	function test_no_default_max_length() {
+	public function test_no_default_max_length() {
 		$this->assertTrue( validate_username(
 			'abcdefghijklmnopqrstuvxxyz0123456789abcdefghijklmnopqrstuvxxyz0123456789abcdefghijklmnopqrstuvxxyz0123456789abcdefghijklmnopqrstuvxxyz0123456789'
 		) );
 	}
 
-	function test_rejects_names_longer_than_max_length() {
+	public function test_rejects_names_longer_than_max_length() {
 		$this->set_option( array( 'max_length' => '6' ) );
 
 		$this->assertTrue( validate_username( 'u' ) );
@@ -244,4 +245,16 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 		$this->assertFalse( validate_username( 'users01' ) );
 		$this->assertFalse( validate_username( 'users012' ) );
 	}
+
+	public function test_uninstall_deletes_option() {
+		$option = 'c2c_restrict_usernames';
+		c2c_RestrictUsernames::get_instance()->get_options();
+
+		$this->assertNotFalse( get_option( $option ) );
+
+		c2c_RestrictUsernames::uninstall();
+
+		$this->assertFalse( get_option( $option ) );
+	}
+
 }
