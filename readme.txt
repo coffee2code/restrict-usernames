@@ -140,9 +140,11 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 = 3.6 (2016-05-03) =
 Highlights:
+
 * This release largely consists of minor behind-the-scenes changes.
 
 Details:
+
 * Change: Update plugin framework to 042:
     * Change class name to c2c_RestrictUsernames_Plugin_042 to be plugin-specific.
     * Set textdomain using a string instead of a variable.
