@@ -10,7 +10,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Description: Restrict the usernames that new users may use when registering for your site.
  *
- * Compatible with WordPress 4.1 through 4.5+ and BuddyPress through 1.9 through 2.6+.
+ * Compatible with WordPress 4.7 through 4.9+ and BuddyPress through 1.9 through 2.6+.
  *
  * =>> Read the accompanying readme.txt file for instructions and documentation.
  * =>> Also, visit the plugin's homepage for additional information and updates.
