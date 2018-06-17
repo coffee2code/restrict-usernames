@@ -260,9 +260,11 @@ final class c2c_RestrictUsernames extends c2c_RestrictUsernames_Plugin_042 {
 		$screen->add_help_tab( array(
 			'id'      => $this->id_base . '-' . 'advanced',
 			'title'   => __( 'Advanced', 'restrict-usernames' ),
-			'content' => <<<HTML
-			<h4>Filter</h4>
-			<p>This plugin provides a filter that can be used to do your own customized username restriction checks. Here's an example:</p>
+			'content' => '<h4>' . __( 'Hook', 'restrict-usernames' ) . '</h4>'
+				. '<p>'
+				. __( "This plugin provides a filter that can be used to do your own customized username restriction checks. Here's an example:", 'restrict-usernames' )
+				. '</p>' .
+			<<<HTML
 			<p><pre>/**
   * Add custom checks on usernames.
   *
@@ -273,8 +275,9 @@ final class c2c_RestrictUsernames extends c2c_RestrictUsernames_Plugin_042 {
 		// checks and deemed the username valid.
 		if ( \$valid ) {
 			// Don't allow usernames to end in numbers.
-			if ( preg_match( '/[0-9]+$/', \$username ) )
+			if ( preg_match( '/[0-9]+$/', \$username ) ) {
 				\$valid = false;
+			}
 		}
 		return \$valid;
 	}
@@ -506,8 +509,7 @@ HTML
 				$do_msg = true;
 			}
 			$msg .= '</ul>';
-			$msg .= '<p>' . __( 'Bear in mind that this only checks the syntax of the username against the rules and restrictions controlled below. It does not test additional criteria (such as
-				if the username already exists) that WordPress also checks for on registration.' ) . '</p>';
+			$msg .= '<p>' . __( 'Bear in mind that this only checks the syntax of the username against the rules and restrictions controlled below. It does not test additional criteria (such as if the username already exists) that WordPress also checks for on registration.' ) . '</p>';
 
 			if ( $do_msg ) {
 				add_settings_error( $this->admin_options_name, 'usernames_tested', $msg, 'updated' );
@@ -527,7 +529,7 @@ HTML
 
 		echo '<div class="wrap"><h2><a name="username_check"></a>' . __( 'Test Usernames', 'restrict-usernames' ) . "</h2>\n";
 		echo '<p>' . __( 'Use the input field below to list usernames you\'d like to test against the plugin\'s restrictions. Separate multiple usernames with commas.', 'restrict-usernames' ) . "</p>\n";
-		echo '<p><em>You must save any changes to the form above before attempting to test usernames.</em></p>';
+		echo '<p><em>' . __( 'You must save any changes to the form above before attempting to test usernames.', 'restrict-usernames' ) . '</em></p>';
 		echo "<form name='c2c_restrict_usernames' action='$action_url' method='post'>\n";
 		wp_nonce_field( $this->nonce_field );
 		echo '<input type="hidden" name="' . $this->get_form_submit_name( 'submit_test_usernames' ) .'" value="1" />';
