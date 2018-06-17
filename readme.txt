@@ -140,6 +140,7 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 = () =
 * Change: Make untranslated strings translatable
+* Change: Minor code reformatting (spacing)
 * Change: Add GitHub link to readme
 * Change: Note compatibility through WP 4.9+
 * Change: Drop compatibility with versions of WP older than 4.7

@@ -157,8 +157,8 @@ final class c2c_RestrictUsernames extends c2c_RestrictUsernames_Plugin_042 {
 				'datatype' => 'array',
 				'default'  => '',
 				'input_attributes' => $input_style,
-				'label'   => __( 'Restricted usernames (partial matching)', 'restrict-usernames' ),
-				'help'    => __( 'These are partial text values that cannot appear in usernames requested by newly-registering users. Useful to prevent usage of bad language or prevent users from using a notation used to identify admins of the site, i.e. "admin_". Be aware that anything listed here will then not be allowed as any part of a username. Define one per line and use all lowercase.', 'restrict-usernames' ) .
+				'label'    => __( 'Restricted usernames (partial matching)', 'restrict-usernames' ),
+				'help'     => __( 'These are partial text values that cannot appear in usernames requested by newly-registering users. Useful to prevent usage of bad language or prevent users from using a notation used to identify admins of the site, i.e. "admin_". Be aware that anything listed here will then not be allowed as any part of a username. Define one per line and use all lowercase.', 'restrict-usernames' ) .
 					( is_multisite() ? __( '<strong>NOTE: Multisite only allows numbers and lowercase letters in usernames.</strong>', 'restrict-usernames' ) : '' ),
 			),
 			'required_partials' => array(
@@ -404,7 +404,7 @@ HTML
 		}
 		$valid = apply_filters( 'c2c_restrict_usernames-validate', $valid, $username, $options );
 
-		$this->got_restricted = !$valid;
+		$this->got_restricted = ! $valid;
 		return $valid;
 	}
 
