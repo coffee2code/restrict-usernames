@@ -96,7 +96,7 @@ Yes.
 1. A screenshot of the plugin's admin settings page.
 
 
-== Filters ==
+== Hooks ==
 
 The plugin exposes one filter for hooking. Typically, customizations utilizing this hook would be put into your active theme's functions.php file, or used by another plugin.
 
@@ -142,6 +142,7 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 * Change: Add GitHub link to readme
 * Change: Note compatibility through WP 4.9+
 * Change: Drop compatibility with versions of WP older than 4.7
+* Change: Rename readme.txt section from 'Filters' to 'Hooks'
 * Change: Update copyright date (2018)
 * Change: Update installation instruction to prefer built-in installer over .zip file
 
