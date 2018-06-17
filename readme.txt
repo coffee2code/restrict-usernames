@@ -138,6 +138,9 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 == Changelog ==
 
+= () =
+* Change: Update copyright date (2018)
+
 = 3.6 (2016-05-03) =
 Highlights:
 
