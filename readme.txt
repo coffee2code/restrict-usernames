@@ -100,7 +100,7 @@ Yes.
 
 The plugin exposes one filter for hooking. Typically, customizations utilizing this hook would be put into your active theme's functions.php file, or used by another plugin.
 
-= c2c_restrict_usernames-validate (filter) =
+**c2c_restrict_usernames-validate (filter)**
 
 The 'c2c_restrict_usernames-validate' hook allows you to add your own customized checks for the username being registered. You can add additional restrictions or override the assessment performed by the plugin.
 
@@ -143,6 +143,7 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 * Change: Note compatibility through WP 4.9+
 * Change: Drop compatibility with versions of WP older than 4.7
 * Change: Rename readme.txt section from 'Filters' to 'Hooks'
+* Change: Modify formatting of hook name in readme to prevent being uppercased when shown in the Plugin Directory
 * Change: Update copyright date (2018)
 * Change: Update installation instruction to prefer built-in installer over .zip file
 
