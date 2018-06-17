@@ -45,7 +45,7 @@ Links: [Plugin Homepage](http://coffee2code.com/wp-plugins/restrict-usernames/) 
 1. Whether installing or updating, whether this plugin or any other, it is always advisable to back-up your data before starting
 1. Install via the built-in WordPress plugin installer. Or download and unzip `restrict-usernames.zip` inside the plugins directory for your site (typically `wp-content/plugins/`)
 1. Activate the plugin through the 'Plugins' admin menu in WordPress. In Multisite, Network Activate the plugin.
-1. Go to the Users -> Name Restrictions admin settings page (which you can also get to via the Settings link next to the plugin on the Manage Plugins page) and specify username restrictions. On a Multisite install, go to My Sites -> Network Admin -> Users -> Name Restrictions.
+1. Go to the 'Users' -> 'Name Restrictions' admin settings page (which you can also get to via the 'Settings' link next to the plugin on the 'Manage Plugins' page) and specify username restrictions. On a Multisite install, go to 'My Sites' -> 'Network Admin' -> 'Users' -> 'Name Restrictions'.
 
 
 == Frequently Asked Questions ==
@@ -68,7 +68,7 @@ Nothing happens to those accounts. The plugin does not do anything with existing
 
 = Does the plugin inform users about restrictions when they are about to register for the site? =
 
-No. The next version will likely add a way for you to optionallly specify a message to be displayed to those registering for a user account.
+No. A future version will likely add a way for you to optionallly specify a message to be displayed to those registering for a user account.
 
 = Does the plugin indicate what specific restriction was violated for a failed registration? =
 
