@@ -474,7 +474,7 @@ HTML
 	public function bp_members_validate_user_signup( $result ) {
 		// Only check username for restrictions if the username hasn't already generated some other error.
 		$errs = $result['errors']->get_error_messages( 'user_name' );
-		if ( $errs ) {
+		if ( ! $errs ) {
 			$valid = $this->username_restrictor( true, $result['user_name'] );
 			if ( ! $valid ) {
 				$errors = $result['errors'];

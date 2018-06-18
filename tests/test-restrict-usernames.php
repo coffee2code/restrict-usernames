@@ -253,6 +253,42 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	}
 
 	/*
+	  bp_members_validate_user_signup()
+	 */
+
+	public function test_bp_members_validate_user_signup_leaves_existing_error() {
+		$errors    = new WP_Error();
+		$error_msg = 'Usernames can only contain lowercase letters (a-z) and numbers.';
+		$errors->add( 'user_name', $error_msg );
+
+		$result = array(
+			'user_name'  => 'administrator', // A disallowed username
+			'user_email' => 'user@example.com',
+			'errors'     => $errors,
+		);
+
+		$res = c2c_RestrictUsernames::get_instance()->bp_members_validate_user_signup( $result );
+
+		$this->assertEquals( array( 'user_name' => array( $error_msg ) ), $errors->errors );
+	}
+
+	public function test_bp_members_validate_user_signup_proceeds_if_no_existing_error() {
+		$errors    = new WP_Error();
+		$error_msg = 'Sorry, this username is invalid. Please choose another.';
+		$this->set_option( array( 'usernames' => array( 'administrator', 'support' ) ) );
+
+		$result = array(
+			'user_name'  => 'administrator', // A disallowed username
+			'user_email' => 'user@example.com',
+			'errors'     => $errors,
+		);
+
+		$res = c2c_RestrictUsernames::get_instance()->bp_members_validate_user_signup( $result );
+
+		$this->assertEquals( array( 'user_name' => array( $error_msg ) ), $errors->errors );
+	}
+
+	/*
 	 * Setting handling
 	 */
 

@@ -139,6 +139,7 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 == Changelog ==
 
 = () =
+* Fix: Correct inverted conditional logic that prevented restrictions from being enforced for BuddyPress and Multisite
 * Change: Update plugin framework to 048
     * 048:
     * When resetting options, delete the option rather than setting it with default values
@@ -166,6 +167,7 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 * Change: Store setting name in constant
 * Change: Make untranslated strings translatable
 * Change: Unit tests:
+    * Add tests for `bp_members_validate_user_signup()`
     * Improve test initialization
     * Improve tests for settings handling
     * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
