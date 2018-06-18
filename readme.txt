@@ -163,6 +163,7 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
     * 043:
     * Disregard invalid lines supplied as part of hash option value.
 * New: Add README.md
+* Change: Store setting name in constant
 * Change: Make untranslated strings translatable
 * Change: Minor code reformatting (spacing)
 * Change: Add GitHub link to readme

@@ -67,6 +67,14 @@ require_once( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'c2c-plugin.php' );
 final class c2c_RestrictUsernames extends c2c_RestrictUsernames_Plugin_048 {
 
 	/**
+	 * Name of plugin's setting.
+	 *
+	 * @since 3.7
+	 * @var string
+	 */
+	const SETTING_NAME = 'c2c_restrict_usernames';
+
+	/**
 	 * The one true instance.
 	 *
 	 * @var c2c_RestrictUsernames
@@ -112,7 +120,7 @@ final class c2c_RestrictUsernames extends c2c_RestrictUsernames_Plugin_048 {
 	 * Handles uninstallation tasks, such as deleting plugin options.
 	 */
 	public static function uninstall() {
-		delete_option( 'c2c_restrict_usernames' );
+		delete_option( self::SETTING_NAME );
 	}
 
 	/**
