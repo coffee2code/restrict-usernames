@@ -252,15 +252,31 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 		$this->assertFalse( validate_username( 'users012' ) );
 	}
 
-	public function test_uninstall_deletes_option() {
-		$option = 'c2c_restrict_usernames';
-		c2c_RestrictUsernames::get_instance()->get_options();
+	/*
+	 * Setting handling
+	 */
 
-		$this->assertNotFalse( get_option( $option ) );
+	public function test_does_not_immediately_store_default_settings_in_db() {
+		$option_name = c2c_RestrictUsernames::SETTING_NAME;
+		// Get the options just to see if they may get saved.
+		$options     = c2c_RestrictUsernames::get_instance()->get_options();
+
+		$this->assertFalse( get_option( $option_name ) );
+	}
+
+	public function test_uninstall_deletes_option() {
+		$option_name = c2c_RestrictUsernames::SETTING_NAME;
+		$options     = c2c_RestrictUsernames::get_instance()->get_options();
+
+		// Explicitly set an option to ensure options get saved to the database.
+		$this->set_option( array( 'min_length' => 4 ) );
+
+		$this->assertNotEmpty( $options );
+		$this->assertNotFalse( get_option( $option_name ) );
 
 		c2c_RestrictUsernames::uninstall();
 
-		$this->assertFalse( get_option( $option ) );
+		$this->assertFalse( get_option( $option_name ) );
 	}
 
 }
