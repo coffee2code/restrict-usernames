@@ -4,18 +4,22 @@ defined( 'ABSPATH' ) or die();
 
 class Restrict_Usernames_Test extends WP_UnitTestCase {
 
-	static function setUpBeforeClass() {
+	public static function setUpBeforeClass() {
+		c2c_RestrictUsernames::get_instance()->install();
 	}
 
 	public function setUp() {
 		parent::setUp();
-		$this->set_option();
+		c2c_RestrictUsernames::get_instance()->reset_options();
 
 		$this->factory->user->create( array( 'user_login' => 'scott' ) );
 	}
 
 	public function tearDown() {
 		parent::tearDown();
+
+		// Reset options
+		c2c_RestrictUsernames::get_instance()->reset_options();
 
 		remove_filter( 'c2c_restrict_usernames-validate', array( $this, 'restrict_username' ), 10, 3 );
 	}
@@ -83,7 +87,7 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	private function set_option( $settings = array() ) {
 		$defaults = array(
 			'disallow_spaces'   => false,
-			'usernames'         => array( 'administrator', 'support' ),
+			'usernames'         => array(),
 			'partial_usernames' => array(),
 			'required_partials' => array(),
 			'min_length'        => '',
@@ -129,6 +133,8 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	 * @dataProvider get_disallowed_usernames
 	 */
 	public function test_explicitly_disallowed_usernames_are_disallowed( $username ) {
+		$this->set_option( array( 'usernames' => array( 'administrator', 'support' ) ) );
+
 		$this->assertFalse( validate_username( $username ) );
 	}
 

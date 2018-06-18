@@ -166,6 +166,7 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 * Change: Store setting name in constant
 * Change: Make untranslated strings translatable
 * Change: Unit tests:
+    * Improve test initialization
     * Default `WP_TESTS_DIR` to `/tmp/wordpress-tests-lib` rather than erroring out if not defined via environment variable
     * Enable more error output for unit tests
 * Change: Minor code reformatting (spacing)
