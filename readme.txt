@@ -140,6 +140,7 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 = () =
 * Fix: Correct inverted conditional logic that prevented restrictions from being enforced for BuddyPress and Multisite
+* Fix: Make restricted usernames and partial usernames case insensitive for comparisons
 * Change: Update plugin framework to 048
     * 048:
     * When resetting options, delete the option rather than setting it with default values

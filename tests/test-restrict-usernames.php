@@ -177,6 +177,17 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @dataProvider get_disallowed_partial_usernames
+	 */
+	public function test_rejects_usernames_containing_disallowed_partial_usernames_is_case_insensitive( $username ) {
+		$this->assertTrue( validate_username( $username ) );
+
+		$this->set_option( array( 'partial_usernames' => array( 'Admin', 'XXX' ) ) );
+
+		$this->assertFalse( validate_username( $username ) );
+	}
+
+	/**
 	 * @dataProvider get_required_partial_usernames
 	 */
 	public function test_accepts_usernames_containing_required_partial_usernames( $username ) {
@@ -195,8 +206,28 @@ class Restrict_Usernames_Test extends WP_UnitTestCase {
 		$this->assertFalse( validate_username( 'charlie team1_' ) );
 	}
 
+	public function test_requires_usernames_to_start_with_required_starting_partial_username_is_case_insensitive() {
+		$this->set_option( array( 'required_partials' => array( '^Team1_', '^TEAM2_' ) ) );
+
+		$this->assertTrue( validate_username( 'team1_adam' ) );
+		$this->assertTrue( validate_username( 'team1_ Bob' ) );
+
+		$this->assertFalse( validate_username( '_team1_adam' ) );
+		$this->assertFalse( validate_username( 'charlie team1_' ) );
+	}
+
 	public function test_requires_usernames_to_end_with_required_ending_partial_username() {
 		$this->set_option( array( 'required_partials' => array( '_team1^', '_team2^' ) ) );
+
+		$this->assertTrue( validate_username( 'adam_team1' ) );
+		$this->assertTrue( validate_username( 'bob _team2' ) );
+
+		$this->assertFalse( validate_username( '_team1_charlie' ) );
+		$this->assertFalse( validate_username( 'dave_team1_4' ) );
+	}
+
+	public function test_requires_usernames_to_end_with_required_ending_partial_username_is_case_insensitive() {
+		$this->set_option( array( 'required_partials' => array( '_Team1^', '_TEAM2^' ) ) );
 
 		$this->assertTrue( validate_username( 'adam_team1' ) );
 		$this->assertTrue( validate_username( 'bob _team2' ) );

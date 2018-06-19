@@ -366,7 +366,7 @@ HTML
 			$valid = false;
 		}
 
-		if ( $valid && $options['usernames'] && in_array( $username, $options['usernames'] ) ) {
+		if ( $valid && $options['usernames'] && in_array( $username, array_map( 'strtolower', $options['usernames'] ) ) ) {
 			$valid = false;
 		}
 
@@ -380,6 +380,7 @@ HTML
 
 		if ( $valid && $options['partial_usernames'] ) {
 			foreach ( $options['partial_usernames'] as $partial ) {
+				$partial = strtolower( $partial );
 				if ( strpos( $username, $partial ) !== false ) {
 					$valid = false;
 					break;
@@ -390,9 +391,10 @@ HTML
 		if ( $valid && $options['required_partials'] ) {
 			$valid = false;
 			foreach ( $options['required_partials'] as $partial ) {
+				$partial = strtolower( $partial );
 				if ( $partial[0] == '^' ) {
 					$partial = substr( $partial, 1 );
-					if ( ( $username != $partial ) && ( strpos( $username, $partial ) === 0 ) ) {
+					if ( strpos( $username, $partial ) === 0 ) {
 						$valid = true;
 						break;
 					}
