@@ -392,14 +392,14 @@ HTML
 			$valid = false;
 			foreach ( $options['required_partials'] as $partial ) {
 				$partial = strtolower( $partial );
-				if ( $partial[0] == '^' ) {
+				if ( $partial[0] === '^' ) {
 					$partial = substr( $partial, 1 );
 					if ( strpos( $username, $partial ) === 0 ) {
 						$valid = true;
 						break;
 					}
 				}
-				elseif ( substr( $partial, -1, 1 ) == '^' ) {
+				elseif ( substr( $partial, -1, 1 ) === '^' ) {
 					$partial = substr( $partial, 0, -1 );
 					if ( ( $username != $partial ) && ( substr( $username, -strlen( $partial ) ) == $partial ) ) {
 						$valid = true;
@@ -412,6 +412,7 @@ HTML
 				}
 			}
 		}
+
 		$valid = apply_filters( 'c2c_restrict_usernames-validate', $valid, $username, $options );
 
 		$this->got_restricted = ! $valid;
