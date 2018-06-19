@@ -6,7 +6,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 4.7
 Tested up to: 4.9
-Stable tag: 3.6
+Stable tag: 3.7
 
 Restrict the usernames that new users may use when registering for your site.
 
@@ -138,7 +138,13 @@ add_filter( 'c2c_restrict_usernames-validate', 'my_restrict_usernames_check', 10
 
 == Changelog ==
 
-= () =
+= 3.7 (2018-06-19) =
+Highlights:
+
+* This release fixes a few bugs (notably one preventing username restrictions from working well for BuddyPress and Multisite) and makes numerous behind-the-scenes changes.
+
+Details:
+
 * Fix: Correct inverted conditional logic that prevented restrictions from being enforced for BuddyPress and Multisite
 * Fix: Make restricted usernames and partial usernames case insensitive for comparisons
 * Fix: Make username testing input field responsive
@@ -374,6 +380,9 @@ Details:
 
 
 == Upgrade Notice ==
+
+= 3.7 =
+Recommended minor update: bugfix for BuddyPress & Multisite; bugfix to make restricted usernames and conditions case-insensitive; updated plugin framework to v048; compatibility is now WP 4.7-4.9; updated copyright date (2018); added README.md; and more.
 
 = 3.6 =
 Recommended update: improved support for localization; verified compatibility through WP 4.5; removed compatibility with WP earlier than 4.1; updated copyright date (2016)

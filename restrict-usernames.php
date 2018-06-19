@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Restrict Usernames
- * Version:     3.6
+ * Version:     3.7
  * Plugin URI:  http://coffee2code.com/wp-plugins/restrict-usernames/
  * Author:      Scott Reilly
  * Author URI:  http://coffee2code.com/
@@ -18,7 +18,7 @@
  *
  * @package Restrict_Usernames
  * @author  Scott Reilly
- * @version 3.6
+ * @version 3.7
  */
 
 /*
@@ -103,7 +103,7 @@ final class c2c_RestrictUsernames extends c2c_RestrictUsernames_Plugin_048 {
 	 * Constructor.
 	 */
 	protected function __construct() {
-		parent::__construct( '3.6', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
+		parent::__construct( '3.7', 'restrict-usernames', 'c2c', __FILE__, array( 'settings_page' => 'users' ) );
 		register_activation_hook( __FILE__, array( __CLASS__, 'activation' ) );
 
 		return self::$instance = $this;
