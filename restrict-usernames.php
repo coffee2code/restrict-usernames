@@ -544,6 +544,7 @@ HTML
 		echo "<form name='c2c_restrict_usernames' action='$action_url' method='post'>\n";
 		wp_nonce_field( $this->nonce_field );
 		echo '<input type="hidden" name="' . $this->get_form_submit_name( 'submit_test_usernames' ) .'" value="1" />';
+		echo '<style>input[name="c2c_test_usernames"] { max-width: 100%; }</style>';
 		echo '<input type="text" size="80" name="c2c_test_usernames" />';
 		echo '<div class="submit"><input type="submit" name="Submit" class="button-primary" value="' . esc_attr__( 'Test', 'restrict-usernames' ) . '" /></div>';
 		echo '</form></div>';
